@@ -17,7 +17,12 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url
 from . import view1
+from apps.interfacetest import views
+
 urlpatterns = [
-    path(r'admin/', admin.site.urls),
-    url(r'^123/$', view1.hello),
+    # path(r'admin/', admin.site.urls),
+    url(r'^$',views.index),
+    url(r'^settings/$',views.settings),
+    url(r'^api/getdata$',views.getdata),
+    url(r'^api/postdata$',views.postdata),
 ]

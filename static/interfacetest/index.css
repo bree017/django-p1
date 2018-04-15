@@ -1,0 +1,44 @@
+html,body{
+    height: 100%;
+    background: #000;
+}
+body,ol,ul,h1,h2,h3,h4,h5,h6,p,th,td,dl,dd,form,fieldset,legend,input,textarea,select{
+    font-family: '微软雅黑';
+    color: #444444;
+    overflow: hidden;
+    margin: 0 auto;
+    box-sizing: border-box;
+    position: relative;
+
+}
+.head-menu{
+    background-color: #303030;
+    float: top;
+    height: 35px;
+}
+.left-menu {
+    background-color: #c1ebe8;
+    width: 160px;
+    height:calc(100% - 35px);
+    float: left;
+}
+.frame{
+    float: left;
+    background-color: #fff;
+    width:calc(100% - 160px);
+    height:calc(100% - 35px);
+}
+.mbutton{
+    background-color:#c1ebe8;
+    width: 200px;
+    height: 50px;
+    font-size:18px;
+    text-indent:20px;
+    line-height:50px ;
+    font-weight: bold;
+
+}
+iframe{
+    width: 100%;
+    height:100%;
+}

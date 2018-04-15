@@ -25,7 +25,7 @@ SECRET_KEY = '2qgsl8z(%d37k_9*8sn2hxi3jf&a9sd&@)gn&$aw$)e6(4cbs-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost','192.168.13.132']
+ALLOWED_HOSTS = ['localhost','*']
 
 
 # Application definition
@@ -37,17 +37,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'TestModel',
+    'apps.interfacetest',
+    # 'pagination',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',     #防跨域插件
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'pagination.middleware.PaginationMiddleware',
 ]
 
 ROOT_URLCONF = 'WEB.urls'
@@ -63,6 +65,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # "django.core.context_processors.request",
             ],
         },
     },
@@ -82,7 +85,7 @@ DATABASES = {
         'NAME': 'bgitest',
         'USER': 'bree',
         'PASSWORD': 'bree',
-        'HOST': '192.168.13.1',
+        'HOST': '192.168.1.109',
         'PORT': '3306',
     }
 }
@@ -110,9 +113,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-hans'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
@@ -124,8 +127,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/static/' # 意思是给静态文件url（即STATIC_URL）一个后缀，在templates里用到的。
 STATICFILES_DIRS = (
         os.path.join(BASE_DIR,'static'), #行末的逗号不能漏
     )
 TEMPLATE_DIRS = (os.path.join(BASE_DIR,  'templates'),)
+#注：STATIC_URL和后面的STATICFILES_DIRS都是全局的变量，模板里可以直接用,so is STATICFILES_DIRS,BASE_DIR
