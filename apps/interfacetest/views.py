@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from django.http import HttpResponse
 from apps.interfacetest.datastruct import ResultSet
 from django.core import serializers
+from django.core import paginator
 import json
 
 # Create your views here.

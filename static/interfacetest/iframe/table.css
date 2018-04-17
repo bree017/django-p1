@@ -1,3 +1,6 @@
+body{
+    overflow:auto;
+}
 table
 {
     border-collapse: collapse;
@@ -6,7 +9,9 @@ table
     cellspacing:0px;
     table-layout:fixed;
     align:center;
-    border:1px
+    border:1px;
+    overflow:auto;
+    width:100%;
 }
 table td, table th
 {
@@ -18,7 +23,6 @@ table td, table th
 table thead th
 {
     background-color: #CCE8EB;
-    width: 100px;
 }
 table tr:nth-child(odd)
 {
@@ -27,8 +31,4 @@ table tr:nth-child(odd)
 table tr:nth-child(even)
 {
     background: #F5FAFA;
-}
-div.table{
-    overflow:auto;
-    width:100%;
 }
