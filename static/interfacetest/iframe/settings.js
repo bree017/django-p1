@@ -1,35 +1,41 @@
-$(document).ready(function(){
-    $("#btn_s").on("click",function() {
-            reflash();
-        }
-    )
-
-    function reflash() {
-         $.get("../api/getdata?type=settings",function(result){
-             if (result.issuccess=true){
-                rebtable(result.data);
-             }
-             else {
-                alert(result.errormsg);
-             }
-        })
-    };
-    function rebtable(data) {
-        if (data.length != undefined){
-            // $("tbody").html("");    //清空表格内容
-            var str="";
-            for (var i=0;i<data.length;i++){
-                str += "<tr>" +
-                        "<th><input type=\"checkbox\" value='" + data[i].pk + "'></th>" +
-                        "<td>" + data[i].fields.sysname + "</td>" +
-                        "<td>" + data[i].fields.host + "</td>" +
-                        "<td>" + data[i].fields.remark + "</td>" +
-                        "</tr>";
+$(document).ready(function() {
+    $("#modal_p input[value='确定']").on('click', function () {
+        var data = {
+            type:"settings",
+            act:"add",
+            sysname:$("#a_sysname").val(),
+            host:$("#a_host").val(),
+            remark:$("#a_remark").val()
+        };
+        $.post(
+            '../api/postdata',
+            data,
+            function(respon){
+                if (respon.issuccess == 1){
+                    window.location.reload();
+                }
+                else{
+                    alert(respon.errormsg);
+                }
             }
+        )
+    })
+    // $("#modal_a input[value='确定']").on('click', function () {
+    $("#btn_a").on('click', function (e) {
+        // alert('111');
+        var chk_value =new Array();
+        $("table.table input[type='checkbox']:checked").each(
+            function(){
+                chk_value.push($(this).val());
+            }
+        )
+        if (chk_value.length != 1){
+            alert('请选择一条数据');
         }
         else{
-            str =='<tr><td><input type="checkbox"></td><td colspan="3">没有数据</td></tr>';
+            e.preventDefault();
+            var modalLocation = $(this).attr('to-data-reveal-id');
+            $('#' + modalLocation).reveal($(this).data());
         }
-        $("tbody").html(str);
-    }
+    })
 })

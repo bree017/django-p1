@@ -1,7 +1,12 @@
 body{
     overflow:auto;
 }
-table
+table{
+    table-layout:fixed; /*这两句是为了解决表格自动换行的问题*/
+    word-wrap:break-word;
+}
+
+table.table
 {
     border-collapse: collapse;
     margin: 0 auto;
@@ -13,22 +18,52 @@ table
     overflow:auto;
     width:100%;
 }
-table td, table th
+table.table td, table.table th
 {
     border: 1px solid #cad9ea;
     color: #666;
     height: 30px;
     position:static;
 }
-table thead th
+table.table thead th
 {
     background-color: #CCE8EB;
 }
-table tr:nth-child(odd)
+table.table tr:nth-child(odd)
 {
     background: #fff;
 }
-table tr:nth-child(even)
+table.table tr:nth-child(even)
 {
     background: #F5FAFA;
+}
+/*弹窗*/
+table.modal{
+    border: 0px;
+}
+table.modal [type="text"]{
+    width: 350px;
+}
+table.modal textarea{
+    width: 350px;
+    height: 200px;
+    resize:none;
+    scrollbar:auto;
+}
+table.modal td{
+    height: 30px;
+}
+
+div.reveal-modal div.modal{
+    text-align:center;
+    margin:20px 0 0 0;
+}
+div.reveal-modal input[type="button"]{
+    /*float:;*/
+    background-color: #2fa2db;
+    color: #f7f7f7;
+    border: 2px;
+    width: 100px;
+    height: 40px;
+    margin: 2px;
 }
