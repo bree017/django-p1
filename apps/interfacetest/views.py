@@ -6,6 +6,7 @@ from apps.interfacetest.datastruct import ResultSet
 from django.core import serializers
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import json
+import datetime
 
 # Create your views here.
 def index(request):
@@ -49,26 +50,47 @@ def getdata(request):
 
 def postdata(request):
     try:
-        if request.method == 'POST':
-            par = request.POST
-            type = par.getlist('type')
-            act = par.getlist('act')
+        if request.method != 'POST':return JsonResponse(ResultSet(0, '请求方式应该为POST').todict())
+        par = request.POST
+        type = par.getlist('type')
+        act = par.getlist('act')
+        if not (type and act):return JsonResponse(ResultSet(0, 'type、act参数必填').todict())
+        if type[0]=='' or act[0]=='':return JsonResponse(ResultSet(0, 'type、act参数不能为空字符串').todict())
+        if type[0] == 'settings':                #只获取第一个参数
             sysname = par.getlist('sysname')
-            if type[0] == '' or act[0] == '' or sysname[0] == '':       #只获取第一个参数
-                return JsonResponse(ResultSet(0, 'type、act、sysname字段不能为空').todict())
-            elif type[0] == 'settings':
-                if act[0] == 'add':
-                    data={
-                        'sysname': par.getlist('sysname')[0],
-                        'host': par.getlist('host')[0],
-                        'remark': par.getlist('remark')[0]
-                    }
-                    models.sysconfig.objects.create(**data)
-                    return JsonResponse(ResultSet(1).todict())
+            id = par.getlist('id')
+            if act[0] == 'add':
+                if not sysname: return JsonResponse(ResultSet(0, '添加数据sysname参数必填').todict())
+                if sysname[0] == '': return JsonResponse(ResultSet(0, 'sysname参数不能为空字符串').todict())
+                data={
+                    'sysname':sysname[0],
+                    'host': (par.getlist('host')) and par.getlist('host')[0] or '',
+                    'remark':(par.getlist('remark')) and (par.getlist('remark')[0]) or ''
+                }
+                models.sysconfig.objects.create(**data)
+                return JsonResponse(ResultSet(1).todict())
+            elif act[0] == 'alter':
+                if not sysname: return JsonResponse(ResultSet(0, '添加数据sysname参数必填').todict())
+                if sysname[0] == '': return JsonResponse(ResultSet(0, 'sysname参数不能为空字符串').todict())
+                if not id: return JsonResponse(ResultSet(0, '添加数据id参数必填').todict())
+                if id[0] == '': return JsonResponse(ResultSet(0, 'id参数不能为空字符串').todict())
+                data={
+                    'sysname':sysname[0],
+                    'host': (par.getlist('host')) and par.getlist('host')[0] or '',
+                    'remark':(par.getlist('remark')) and (par.getlist('remark')[0]) or '',
+                    'last_update_date':datetime.datetime.now()
+                }
+                models.sysconfig.objects.filter(id=id[0]).update(**data)
+                return JsonResponse(ResultSet(1).todict())
+            elif act[0] =='delete':
+                if not id: return JsonResponse(ResultSet(0, '添加数据id参数必填').todict())
+                if id[0] == '': return JsonResponse(ResultSet(0, 'id参数不能为空字符串').todict())
+                ids=id[0].split(',')
+                models.sysconfig.objects.filter(id__in=ids).delete()
+                return JsonResponse(ResultSet(1).todict())
             else:
-                return JsonResponse(ResultSet(0, 'type字段有误').todict())
-
+                return JsonResponse(ResultSet(0, 'act参数有误').todict())
         else:
-            return JsonResponse(ResultSet(0,'请求方式应该为POST').todict())
+            return JsonResponse(ResultSet(0, 'type参数有误').todict())
     except Exception as e:
         return JsonResponse(ResultSet(0, str(e)).todict())

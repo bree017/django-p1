@@ -2,9 +2,9 @@ html,body{
     height: 100%;
     background: #f7f7f7;
 }
-body,ol,ul,h1,h2,h3,h4,h5,h6,p,th,td,dl,dd,form,fieldset,legend,input,textarea,select{
+body,ol,ul,h1,h2,h3,h4,h5,h6,p,th,td,dl,dd,form,fieldset,legend,input,textarea,select,pre{
     font-family: '微软雅黑';
-    color: #222222;
+    color: #666666;
     margin: 0 auto;
     box-sizing: border-box;
     position: relative;

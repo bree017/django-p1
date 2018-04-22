@@ -29,6 +29,7 @@ table.table thead th
 {
     background-color: #CCE8EB;
 }
+
 table.table tr:nth-child(odd)
 {
     background: #fff;
@@ -37,6 +38,10 @@ table.table tr:nth-child(even)
 {
     background: #F5FAFA;
 }
+table.table tr[selected="selected"]{
+    background: #C7F1FF;
+}
+table.table
 /*弹窗*/
 table.modal{
     border: 0px;
@@ -66,4 +71,12 @@ div.reveal-modal input[type="button"]{
     width: 100px;
     height: 40px;
     margin: 2px;
+}
+
+pre{                    /*使pre标签在td中换行*/
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -pre-wrap;
+    white-space: -o-pre-wrap;
+    word-wrap: break-word;
 }

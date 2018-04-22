@@ -8,3 +8,4 @@ class sysconfig(models.Model):
     host=models.CharField(null=False,default='http://localhost/',max_length=100)
     remark=models.TextField()
     created_date=models.DateTimeField(default=datetime.datetime.now)
+    last_update_date=models.DateTimeField(default='1000-01-01 00:00:00')
