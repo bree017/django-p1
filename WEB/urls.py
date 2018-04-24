@@ -23,7 +23,7 @@ urlpatterns = [
     # path(r'admin/', admin.site.urls),
     url(r'^$',views.index),
     url(r'^settings/$',views.settings),
-    url(r'^settings_old/$',views.settings_old),
+    url(r'^ifmanage/$',views.ifmanage),
     url(r'^api/getdata$',views.getdata),
     url(r'^api/postdata$',views.postdata),
 ]

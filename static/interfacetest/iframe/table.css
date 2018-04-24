@@ -41,7 +41,39 @@ table.table tr:nth-child(even)
 table.table tr[selected="selected"]{
     background: #C7F1FF;
 }
-table.table
+/*条件筛选*/
+table.filter{
+    border-collapse: collapse;
+    margin: 0 auto;
+    text-align: right;
+    cellspacing:0px;
+    table-layout:fixed;
+    align:left;
+    overflow:auto;
+    width:100%;
+    border:1px;
+}
+table.filter td{
+    border:1px solid #cbcbcb;
+    text-align: left;
+    padding: 6px;
+    min-width: 230px;
+}
+table.filter th{
+    border:1px solid #cbcbcb;
+    height:35px;
+    background-color: #dcfff7;
+    width: 120px;
+}
+table.filter input[type="text"]{
+    width: 150px;
+    height: 26px;
+}
+table.filter select{
+    width: 150px;
+    height: 26px;
+}
+
 /*弹窗*/
 table.modal{
     border: 0px;

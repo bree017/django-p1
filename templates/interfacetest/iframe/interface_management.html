@@ -1,0 +1,81 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>接口管理</title>
+    <link type="text/css" rel="styleSheet" href="{% static 'interfacetest/iframe/table.css' %}">
+    <link type="text/css" rel="styleSheet" href="{% static 'interfacetest/iframe/interface_management/interface_management.css' %}">
+    <link type="text/css" rel="styleSheet" href="{% static 'interfacetest/plugins/reveal/reveal.css' %}">
+
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="{% static 'interfacetest/iframe/interface_management/interface_management.js' %}"></script>
+    <script src="{% static 'interfacetest/iframe/table.js' %}"></script>
+    <script src="{% static 'interfacetest/plugins/reveal/jquery.reveal.js' %}"></script>
+</head>
+<body>
+    <div class="top">接口管理
+    <input class="topinput" type="button" value="删除" id="btn_d" to-data-reveal-id="modal_d" data-animation="none">
+    <input class="topinput" type="button" value="修改" id="btn_a" to-data-reveal-id="modal_a" data-animation="none">
+    <input class="topinput" type="button" value="添加" id="btn_p" data-reveal-id="modal_p" data-animation="none">
+    <input class="topinput" type="button" value="搜索" id="btn_s">
+    </div>
+
+    <div class="filter">
+        <table class="filter">
+            <tbody>
+            <tr>
+                <th>接口名：</th>
+                <td><input type="text" class="ifname"></td>
+                <th>URL：</th>
+                <td><input type="text" class="url"></td>
+                <th>测试系统：</th>
+                <td><select class="sysid">
+                    <option>123</option>
+                </select></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="table">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th style="width:30px"><input type="checkbox" value=0></th>
+                    <th style="width:200px">接口名</th>
+                    <th style="width:200px">测试系统</th>
+                    <th style="width:200px">路径</th>
+                    <th style="width:1000px">备注</th>
+                </tr>
+            </thead>
+            <tbody id="data">
+                {% for contact in contacts %}
+                    <tr trid={{ contact.id }}>
+                        <td ><input type="checkbox" value={{ contact.id }}></td>
+                        <td tdname="sysname">{{ contact.sysname }}</td>
+                        <td tdname="host">{{ contact.host }}</td>
+                        <td tdname="remark"><pre>{{ contact.remark  }}</pre></td>   {# 用pre标签处理换行符显示问题 #}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="pagination">        {# 后面改善一下外观 #}
+        <span class="step-links">
+            {% if contacts.has_previous %}
+                <a href="?page={{ contacts.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ contacts.number }} of {{ contacts.paginator.num_pages }}.
+            </span>
+
+            {% if contacts.has_next %}
+                <a href="?page={{ contacts.next_page_number }}">next</a>
+
+            {% endif %}
+        </span>
+    </div>
+</body>
+</html>

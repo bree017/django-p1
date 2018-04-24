@@ -1,0 +1,37 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Django接口测试框架</title>
+    <link type="text/css" rel="styleSheet"  href="{% static 'interfacetest/index.css' %}">
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+</head>
+<body>
+    <div class="head-menu">
+        <!--顶部-->
+    </div>
+    <div class="left-menu">
+        <!--侧边栏-->
+        <div class="mbutton" id="mbtn1" active=false onclick="mbtactive('mbtn1')">设置</div>
+        <div class="mbutton" id="mbtn2" active=true>接口管理</div>
+        <div class="mbutton" id="mbtn3" active=false>测试用例</div>
+        <!--<div class="mbutton">自动化测试</div>-->
+        <!--<div class="mbutton">性能测试</div>-->
+    </div>
+    <div class="frame" >
+        <iframe src="settings" frameborder="0"></iframe>
+    </div>
+
+    <script>
+        $('.left-menu > div').on({
+            'mouseover': function () {
+                $(this).css('background-color', '#95d8eb');
+            },
+            'mouseout': function () {
+                $(this).css('background-color', '#c1ebe8');
+            }
+        });
+    </script>
+</body>
+</html>

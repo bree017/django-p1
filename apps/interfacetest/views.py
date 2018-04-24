@@ -12,9 +12,6 @@ import datetime
 def index(request):
     return render(request,'interfacetest/index.html')
 
-def settings_old(request):
-    return render(request,'interfacetest/iframe/settings(old).html')
-
 def settings(request):
     page = request.GET.get('page')
     contact_list = models.sysconfig.objects.all()  # 获取所有contacts,假设在models.py中已定义了Contacts模型
@@ -29,6 +26,20 @@ def settings(request):
         contacts = paginator.page(paginator.num_pages)
     return render(request,'interfacetest/iframe/settings.html',{'contacts': contacts})
 
+def ifmanage(request):
+    page = request.GET.get('page')
+
+    contact_list = models.ifmanage.objects.all()  # 获取所有contacts,假设在models.py中已定义了Contacts模型
+    paginator = Paginator(contact_list, 20) # 每页20条
+    try:
+        contacts = paginator.page(page) # contacts为Page对象！
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        contacts = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        contacts = paginator.page(paginator.num_pages)
+    return render(request,'interfacetest/iframe/interface_management.html',{'contacts': contacts})
 #查询数据接口,不用了
 def getdata(request):
     try:
