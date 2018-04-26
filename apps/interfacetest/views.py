@@ -5,6 +5,8 @@ from django.http import HttpResponse
 from apps.interfacetest.datastruct import ResultSet
 from django.core import serializers
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from itertools import chain
+
 import json
 import datetime
 
@@ -26,20 +28,41 @@ def settings(request):
         contacts = paginator.page(paginator.num_pages)
     return render(request,'interfacetest/iframe/settings.html',{'contacts': contacts})
 
-def ifmanage(request):
-    page = request.GET.get('page')
-
-    contact_list = models.ifmanage.objects.all()  # 获取所有contacts,假设在models.py中已定义了Contacts模型
-    paginator = Paginator(contact_list, 20) # 每页20条
+def ifmanage(request):          #搜索功能还不行
     try:
-        contacts = paginator.page(page) # contacts为Page对象！
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        contacts = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        contacts = paginator.page(paginator.num_pages)
-    return render(request,'interfacetest/iframe/interface_management.html',{'contacts': contacts})
+        page = request.GET.get('page')
+        ifname = request.GET.get('ifname')
+        url = request.GET.get('url')
+        sysid = request.GET.get('sysid')
+
+        contact_list = models.ifmanage.objects.all()
+        if ifname == None or ifname == '':
+            ifname = ''
+        else:
+            contact_list = contact_list.filter(ifname__contains=ifname)
+        if url == None or url == '':
+            url = ''
+        else:
+            contact_list = contact_list.filter(url__contains=url)
+        if sysid == None or sysid == '0':
+            sysid = 0
+        else:
+            sysid=int(sysid)
+            contact_list = contact_list.filter(sys=sysid)
+        filter ={'ifname':ifname,'url':url,'sysid':sysid}
+        testsys=models.sysconfig.objects.values('id','sysname').distinct()
+        paginator = Paginator(contact_list, 10) # 每页20条
+        try:
+            contacts = paginator.page(page) # contacts为Page对象！
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            contacts = paginator.page(1)
+        except EmptyPage:
+            # If page is out of range (e.g. 9999), deliver last page of results.
+            contacts = paginator.page(paginator.num_pages)
+        return render(request,'interfacetest/iframe/interface_management.html',{'contacts': contacts,'testsys':testsys,'filter':filter},)
+    except Exception as e:
+            return JsonResponse(ResultSet(0, str(e)).todict())
 #查询数据接口,不用了
 def getdata(request):
     try:

@@ -1,4 +1,8 @@
 $(document).ready(function() {
+    $("#btn_s").on('click', function (e) {
+        window.location.reload();
+    })
+
     $("#modal_p input[value='确定']").on('click', function () {
         var data = {
             type:"settings",
