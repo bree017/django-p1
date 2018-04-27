@@ -57,7 +57,7 @@
                     <tr trid={{ contact.id }}>
                         <td ><input type="checkbox" value={{ contact.id }}></td>
                         <td tdname="ifname">{{ contact.ifname }}</td>
-                        <td tdname="sysname">{{ contact.sys.sysname }}</td>
+                        <td tdname="sysname" sysid={{ contact.sys.id }}>{{ contact.sys.sysname }}</td>
                         <td tdname="url">{{ contact.url }}</td>
                         <td tdname="remark"><pre>{{ contact.remark  }}</pre></td>   {# 用pre标签处理换行符显示问题 #}
                     </tr>
@@ -81,6 +81,62 @@
 
             {% endif %}
         </span>
+    </div>
+
+    {#弹窗#}
+    <div id="modal_p" class="reveal-modal" >
+        <h1 class="modal">添加</h1>
+        <table class="modal">
+            <tr><td width="100">接口名：</td>
+                <td ><input type="text" id="p_ifname"></td></tr>
+            <tr><td >测试系统：</td>
+                <td ><select name="" id="p_sysid">
+                    {% for sys in testsys %}
+                        <option value={{ sys.id }}>{{ sys.sysname }}</option>
+                    {% endfor %}
+                </select></td></tr>
+            <tr><td width="100">url：</td>
+                <td ><input type="text" id="p_url"></td></tr>
+            <tr><td >备注：</td>
+                <td ><textarea id="p_remark"></textarea></td></tr>
+        </table>
+        <div class="modal">
+        <input type="button" value="确定" >
+        <input type="button" value="取消" class="close-reveal-modal">
+        </div>
+        <a class="close-reveal-modal">&#215;</a>
+    </div>
+    <div id="modal_a" class="reveal-modal" >
+        <h1 class="modal">修改</h1>
+
+        <table class="modal">
+            <tr><td width="100">接口名：</td>
+                <td ><input type="text" id="a_ifname"></td></tr>
+            <tr><td >测试系统：</td>
+                <td ><select name="" id="a_sysid" value="0">
+                    {% for sys in testsys %}
+                        <option value={{ sys.id }}>{{ sys.sysname }}</option>
+                    {% endfor %}
+                </select></td></tr>
+            <tr><td width="100">url：</td>
+                <td ><input type="text" id="a_url"></td></tr>
+            <tr><td >备注：</td>
+                <td ><textarea id="a_remark"></textarea></td></tr>
+        </table>
+        <div class="modal">
+        <input type="button" value="确定" >
+        <input type="button" value="取消" class="close-reveal-modal">
+        </div>
+        <a class="close-reveal-modal">&#215;</a>
+    </div>
+    <div id="modal_d" class="reveal-modal" >
+        <h1 class="modal">删除</h1>
+        <h4>确定删除数据？</h4>
+        <div class="modal">
+        <input type="button" value="确定" >
+        <input type="button" value="取消" class="close-reveal-modal">
+        </div>
+        <a class="close-reveal-modal">&#215;</a>
     </div>
 </body>
 </html>

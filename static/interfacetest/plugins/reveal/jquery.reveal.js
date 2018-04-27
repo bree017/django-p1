@@ -117,6 +117,7 @@ $(document).ready(function() {
                     }
                     $('.reveal-modal input[type="text"]').val("");//清空输入框选项
                     $('.reveal-modal textarea').val("");
+                    $('.reveal-modal select').val("0");
                 }
                 modal.unbind('reveal:close');
             });

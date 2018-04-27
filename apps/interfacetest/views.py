@@ -28,7 +28,7 @@ def settings(request):
         contacts = paginator.page(paginator.num_pages)
     return render(request,'interfacetest/iframe/settings.html',{'contacts': contacts})
 
-def ifmanage(request):          #搜索功能还不行
+def ifmanage(request):
     try:
         page = request.GET.get('page')
         ifname = request.GET.get('ifname')
@@ -89,7 +89,7 @@ def postdata(request):
         type = par.getlist('type')
         act = par.getlist('act')
         if not (type and act):return JsonResponse(ResultSet(0, 'type、act参数必填').todict())
-        if type[0]=='' or act[0]=='':return JsonResponse(ResultSet(0, 'type、act参数不能为空字符串').todict())
+        if type[0] =='' or act[0]=='':return JsonResponse(ResultSet(0, 'type、act参数不能为空字符串').todict())
         if type[0] == 'settings':                #只获取第一个参数
             sysname = par.getlist('sysname')
             id = par.getlist('id')
@@ -104,9 +104,9 @@ def postdata(request):
                 models.sysconfig.objects.create(**data)
                 return JsonResponse(ResultSet(1).todict())
             elif act[0] == 'alter':
-                if not sysname: return JsonResponse(ResultSet(0, '添加数据sysname参数必填').todict())
+                if not sysname: return JsonResponse(ResultSet(0, '修改数据sysname参数必填').todict())
                 if sysname[0] == '': return JsonResponse(ResultSet(0, 'sysname参数不能为空字符串').todict())
-                if not id: return JsonResponse(ResultSet(0, '添加数据id参数必填').todict())
+                if not id: return JsonResponse(ResultSet(0, '修改数据id参数必填').todict())
                 if id[0] == '': return JsonResponse(ResultSet(0, 'id参数不能为空字符串').todict())
                 data={
                     'sysname':sysname[0],
@@ -124,6 +124,47 @@ def postdata(request):
                 return JsonResponse(ResultSet(1).todict())
             else:
                 return JsonResponse(ResultSet(0, 'act参数有误').todict())
+        if type[0] =='ifmanage':
+            ifname = par.getlist('ifname')
+            id = par.getlist('id')
+            sysid = par.getlist('sysid')
+            if act[0] == 'add':
+                if not ifname: return JsonResponse(ResultSet(0, '添加数据接口名必填').todict())
+                if ifname[0] == '': return JsonResponse(ResultSet(0, '接口名不能为空').todict())
+                if not sysid: return JsonResponse(ResultSet(0, '添加数据测试系统必选').todict())
+                if sysid[0] == '': return JsonResponse(ResultSet(0, '测试系统不能为空').todict())
+                data={
+                    'ifname':ifname[0],
+                    'sys':models.sysconfig.objects.get(id=sysid[0]),
+                    'url': (par.getlist('url')) and par.getlist('url')[0] or '',
+                    'remark':(par.getlist('remark')) and (par.getlist('remark')[0]) or ''
+                }
+                models.ifmanage.objects.create(**data)
+                return JsonResponse(ResultSet(1).todict())
+            elif act[0] == 'alter':
+                if not ifname: return JsonResponse(ResultSet(0, '修改数据接口名必填').todict())
+                if ifname[0] == '': return JsonResponse(ResultSet(0, '接口名不能为空').todict())
+                if not sysid: return JsonResponse(ResultSet(0, '修改数据测试系统必选').todict())
+                if sysid[0] == '': return JsonResponse(ResultSet(0, '测试系统不能为空').todict())
+                if not id: return JsonResponse(ResultSet(0, '修改数据id必填').todict())
+                if id[0] == '': return JsonResponse(ResultSet(0, 'id不能为空').todict())
+
+                data={
+                    'id':id[0],
+                    'ifname':ifname[0],
+                    'sys':models.sysconfig.objects.get(id=sysid[0]),
+                    'url': (par.getlist('url')) and par.getlist('url')[0] or '',
+                    'remark':(par.getlist('remark')) and (par.getlist('remark')[0]) or '',
+                    'last_update_date':datetime.datetime.now()
+                }
+                models.ifmanage.objects.filter(id=id[0]).update(**data)
+                return JsonResponse(ResultSet(1).todict())
+            elif act[0] == 'delete':
+                if not id: return JsonResponse(ResultSet(0, '添加数据id参数必填').todict())
+                if id[0] == '': return JsonResponse(ResultSet(0, 'id参数不能为空字符串').todict())
+                ids = id[0].split(',')
+                models.ifmanage.objects.filter(id__in=ids).delete()
+                return JsonResponse(ResultSet(1).todict())
         else:
             return JsonResponse(ResultSet(0, 'type参数有误').todict())
     except Exception as e:
