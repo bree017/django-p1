@@ -49,7 +49,6 @@ $(document).ready(function() {
             }
         )
     })
-
     $("#btn_a").on('click', function (e) {
         var chk_value =new Array();
         $("table.table input[type='checkbox']:checked").each(
@@ -72,7 +71,6 @@ $(document).ready(function() {
             $('#' + modalLocation).reveal($(this).data());
         }
     })
-
     $("#modal_a input[value='确定']").on('click', function (){
         var data = {
             type:"ifmanage",
@@ -96,7 +94,6 @@ $(document).ready(function() {
             }
         )
      })
-
     $("#btn_d").on('click', function (e) {
         var chk_value =new Array();
         $("table.table input[type='checkbox']:checked").each(
@@ -113,7 +110,6 @@ $(document).ready(function() {
             $('#' + modalLocation).reveal($(this).data());
         }
     })
-
     $("#modal_d input[value='确定']").on('click', function (){
          var chk_value =new Array();
          $("table.table input[type='checkbox']:checked").each(
@@ -138,4 +134,32 @@ $(document).ready(function() {
             }
         )
      })
+
+    $("div.postman table.controler input.params").on("click",function () {
+        $("div.postman div.request table.params").toggle();         //参数表格隐藏/显示
+    })
+    $("div.postman div.request table").on("blur", "input[type='text']",function (e) {        //用于参数表自动生成空行
+        var trid=$(this).attr("trid");
+        var ntrid=parseInt(trid)+1;
+        var tableclass=$(this).attr("class");
+        if($(this).val() !=""){
+            if ($("div.postman div.request table."+tableclass+" tr[trid="+trid+"]").next().length == 0){     //判断下一个兄弟元素是否不存在
+                console.log(ntrid);
+                content ="<tr trid="+ntrid+">" +
+                    "<td><input type=\"text\" class="+tableclass+" trid="+ntrid+"></td>" +
+                    "<td><input type=\"text\" class="+tableclass+" trid="+ntrid+"></td>" +
+                    "<td><input type=\"button\" value=\"X\" class="+tableclass+" trid="+ntrid+"></td>" +
+                    "</tr>"
+                $("div.postman div.request table."+tableclass+" tbody").append(content);
+            }
+        }
+    })
+    $("div.postman div.request table").on("click", "input[type='button']",function () {
+        var trid=$(this).attr("trid");
+        var tableclass=$(this).attr("class");
+        if ($("div.postman div.request table."+tableclass+" tr[trid="+trid+"]").next().length != 0){
+            $("div.postman div.request table."+tableclass+" tr[trid="+trid+"]").remove();
+        }
+    })
+
 })

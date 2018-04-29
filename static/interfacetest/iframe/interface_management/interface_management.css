@@ -28,4 +28,39 @@ body,ol,ul,h1,h2,h3,h4,h5,h6,p,th,td,dl,dd,form,fieldset,legend,input,textarea,s
 div.table{
     overflow: auto;
 }
+input[type="text"]{
+    height:26px;
+}
+div.postman{
+    margin:25px 0 0 0;
+    border: double #c3c3c3;
+    overflow:hidden;
+}
+div.postman,div.postman div{
+    padding:10px 0 0 0;
+    background-color: #D4FAFF;
+}
+div.postman div.request,div.postman div.response{
+    float:left;
+    display:inline;
+    width: 50%;
+    height: auto;
+}
+
+div.postman table.controler{
+    width: 100%;
+}
+div.postman input[type="button"],div.postman select{
+    height:26px;
+}
+div.postman table.controler #pm_url{
+    width: 100%;
+}
+div.postman table.params input,div.postman table.header input{
+    width: 100%;
+}
+div.postman textarea{
+    width:100%;
+    resize:none;
+}
 

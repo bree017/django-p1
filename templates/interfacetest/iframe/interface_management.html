@@ -138,5 +138,51 @@
         </div>
         <a class="close-reveal-modal">&#215;</a>
     </div>
+{#postman功能#}
+    <div class="postman">
+        <div class="request" >
+            <table class="controler">
+                <tbody><tr>
+                    <td width="60"><select name="metod" id="pm_metod">
+                        <option value="post">POST</option>
+                        <option value="get">GET</option></select></td>
+                    <td ><input type="text" id="pm_url"></td>
+                    <td width="63"><input type="button" value="Params" class="params"></td>
+                    <td width="60"><input type="button" value="Send" class="send"></td>
+                </tr></tbody>
+            </table>
+            <table class="params">
+                <tbody>
+                <tr>
+                    <th>key</th>
+                    <th>value</th>
+                    <th width="30"></th>
+                </tr>
+                <tr trid="1">
+                    <td><input type="text" class="params" trid="1"></td>
+                    <td><input type="text" class="params" trid="1"></td>
+                </tr>
+                </tbody>
+            </table>
+            <table class="reqconf"><tbody><tr><td>Header</td><td>Body</td></tr></tbody></table>
+            <table class="header">
+                <tbody>
+                <tr>
+                    <th>key</th>
+                    <th>value</th>
+                    <th width="30"></th>
+                </tr>
+                <tr trid="1">
+                    <td><input type="text" class="header" trid="1"></td>
+                    <td><input type="text" class="header" trid="1"></td>
+                </tr>
+                </tbody>
+            </table>
+            <textarea name="body" id="req_body" cols="30" rows="10"></textarea>
+        </div>
+        <div class="response">
+            <div contenteditable="true" id="rsp_rsp" readonly="readonly">4165465465</div>
+        </div>
+    </div>
 </body>
 </html>

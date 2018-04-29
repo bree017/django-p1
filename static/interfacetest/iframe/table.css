@@ -4,6 +4,7 @@ body{
 table{
     table-layout:fixed; /*这两句是为了解决表格自动换行的问题*/
     word-wrap:break-word;
+    width: 100%;
 }
 
 table.table
