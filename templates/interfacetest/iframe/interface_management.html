@@ -47,9 +47,9 @@
                 <tr>
                     <th style="width:30px"><input type="checkbox" value=0></th>
                     <th style="width:200px">接口名</th>
-                    <th style="width:200px">测试系统</th>
+                    <th style="width:300px">测试系统</th>
                     <th style="width:200px">路径</th>
-                    <th style="width:1000px">备注</th>
+                    <th >备注</th>
                 </tr>
             </thead>
             <tbody id="data">
@@ -57,7 +57,7 @@
                     <tr trid={{ contact.id }}>
                         <td ><input type="checkbox" value={{ contact.id }}></td>
                         <td tdname="ifname">{{ contact.ifname }}</td>
-                        <td tdname="sysname" sysid={{ contact.sys.id }}>{{ contact.sys.sysname }}</td>
+                        <td tdname="sysname" sysid={{ contact.sys.id }}>{{ contact.sys.sysname }}:{{ contact.sys.host }}</td>
                         <td tdname="url">{{ contact.url }}</td>
                         <td tdname="remark"><pre>{{ contact.remark  }}</pre></td>   {# 用pre标签处理换行符显示问题 #}
                     </tr>
@@ -151,7 +151,7 @@
                     <td width="60"><input type="button" value="Send" class="send"></td>
                 </tr></tbody>
             </table>
-            <table class="params">
+            <div class="params"><table class="params">
                 <tbody>
                 <tr>
                     <th>key</th>
@@ -161,27 +161,46 @@
                 <tr trid="1">
                     <td><input type="text" class="params" trid="1"></td>
                     <td><input type="text" class="params" trid="1"></td>
+                    <td><input type="button" value="X" class="params" trid=1></td>
                 </tr>
                 </tbody>
-            </table>
-            <table class="reqconf"><tbody><tr><td>Header</td><td>Body</td></tr></tbody></table>
-            <table class="header">
-                <tbody>
-                <tr>
-                    <th>key</th>
-                    <th>value</th>
-                    <th width="30"></th>
-                </tr>
-                <tr trid="1">
-                    <td><input type="text" class="header" trid="1"></td>
-                    <td><input type="text" class="header" trid="1"></td>
-                </tr>
-                </tbody>
-            </table>
-            <textarea name="body" id="req_body" cols="30" rows="10"></textarea>
+            </table></div>
+            <div class="label" labeltype="config">Header</div>
+            <div class="label" labeltype="config">Body</div>
+            <div class="config">
+                <table class="header"  hidden>
+                    <tbody>
+                    <tr>
+                        <th>key</th>
+                        <th>value</th>
+                        <th width="30"></th>
+                    </tr>
+                    <tr trid="1">
+                        <td><input type="text" class="header" trid="1"></td>
+                        <td><input type="text" class="header" trid="1"></td>
+                        <td><input type="button" value="X" class="header" trid=1></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <select class="body" id="req_body_type">
+                    <option value="json" selected="selected">application/json</option>
+                    <option value="123">text/plain</option>
+                    <option value="123">application/x-www-form-urlencoded</option>
+                </select>
+                <textarea class="body" id="req_body" cols="30" rows="10"></textarea>
+            </div>
         </div>
-        <div class="response">
-            <div contenteditable="true" id="rsp_rsp" readonly="readonly">4165465465</div>
+        <div class="responses">
+            <div class="label" labeltype="rsp">Response</div>
+            <div class="label" labeltype="rsp">Header</div>
+            <div class="rsp">
+                <div class="response" contenteditable="true" id="rsp_rsp" readonly="readonly">4165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465
+                4165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465
+                </div>
+                <div class="header" contenteditable="true" id="rsp_header" readonly="readonly" hidden>1234564165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465
+                4165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465
+                </div>
+            </div>
         </div>
     </div>
 </body>

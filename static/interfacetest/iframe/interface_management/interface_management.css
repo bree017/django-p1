@@ -31,22 +31,32 @@ div.table{
 input[type="text"]{
     height:26px;
 }
+
+
+
 div.postman{
     margin:25px 0 0 0;
-    border: double #c3c3c3;
+    border-top: double #c3c3c3;
+    border-bottom: double #c3c3c3;
     overflow:hidden;
 }
 div.postman,div.postman div{
-    padding:10px 0 0 0;
+    padding:10px 5px 10px 5px;
     background-color: #D4FAFF;
+    box-sizing:border-box;
 }
-div.postman div.request,div.postman div.response{
+div.postman div.request,div.postman div.responses{
     float:left;
-    display:inline;
+    display: inline-block;
     width: 50%;
     height: auto;
 }
-
+div.postman div.request{
+    border-right:solid #808080;
+}
+div.postman div.request div{
+    border-bottom: solid #c3c3c3 1px;
+}
 div.postman table.controler{
     width: 100%;
 }
@@ -63,4 +73,8 @@ div.postman textarea{
     width:100%;
     resize:none;
 }
-
+div.postman div.request div.label,div.postman div.responses div.label{
+    display: inline-block;
+    border-bottom: none;
+    cursor:default;
+}

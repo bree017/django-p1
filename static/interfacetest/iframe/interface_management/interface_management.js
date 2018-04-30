@@ -154,12 +154,52 @@ $(document).ready(function() {
             }
         }
     })
-    $("div.postman div.request table").on("click", "input[type='button']",function () {
+    $("div.postman div.request table").on("click", "input[type='button']",function () {         //表格行删除
         var trid=$(this).attr("trid");
         var tableclass=$(this).attr("class");
         if ($("div.postman div.request table."+tableclass+" tr[trid="+trid+"]").next().length != 0){
             $("div.postman div.request table."+tableclass+" tr[trid="+trid+"]").remove();
         }
     })
+    $("div.postman div.label").on("click",function () {
+        var config=$(this).text().toLowerCase();
+        var labeltype=$(this).attr("labeltype");
+        $("div.postman div."+labeltype).children().each(function () {
+            if ($(this).attr("class").toLowerCase() == config) {
+                $(this).show();
+            }
+            else {
+                $(this).hide();
+            }
+        })
+    })
 
+    //将接口信息与postman信息交互用户友好化
+    $("table.table tbody tr input[type='checkbox']").on("click",function () {
+        var trid=$(this).val();
+        var host=$("table.table tr[trid="+trid+"] td[tdname='sysname']").text().split(":");
+        host.shift();
+        host=host.join(':');
+        var path=$("table.table tr[trid="+trid+"] td[tdname='url']").text();
+        if (path.substr(0,1)!='/' ){path ='/'+path;}
+        if ($(this).is(':checked')){
+
+            $("#pm_url").val(host+path);
+        }
+        event.stopPropagation();
+    })
+    $("#btn_p").on("click",function (e) {
+        var url=$("#pm_url").val();
+        //js正则不怎么会用，不支持（?<pattern）
+        if (url.indexOf("://") != -1){
+            url=url.split('://');
+            var host=url[1].split('/');
+            host.shift();
+            host="/"+host.join('/');
+        }
+        else {
+            var host=url;
+        }
+        $("#p_url").val(host);
+    })
 })
