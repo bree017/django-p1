@@ -141,14 +141,14 @@ $(document).ready(function() {
     $("div.postman div.request table").on("blur", "input[type='text']",function (e) {        //用于参数表自动生成空行
         var trid=$(this).attr("trid");
         var ntrid=parseInt(trid)+1;
-        var tableclass=$(this).attr("class");
+        var tableclass=$(this).attr("tclass");
         if($(this).val() !=""){
             if ($("div.postman div.request table."+tableclass+" tr[trid="+trid+"]").next().length == 0){     //判断下一个兄弟元素是否不存在
                 console.log(ntrid);
                 content ="<tr trid="+ntrid+">" +
-                    "<td><input type=\"text\" class="+tableclass+" trid="+ntrid+"></td>" +
-                    "<td><input type=\"text\" class="+tableclass+" trid="+ntrid+"></td>" +
-                    "<td><input type=\"button\" value=\"X\" class="+tableclass+" trid="+ntrid+"></td>" +
+                    "<td><input type=\"text\" class='key' tclass="+tableclass+ " trid="+ntrid+"></td>" +
+                    "<td><input type=\"text\" class='value' tclass="+tableclass+ " trid="+ntrid+"></td>" +
+                    "<td><input type=\"button\" value=\"X\" class='delbtn' tclass="+tableclass+ " trid="+ntrid+"></td>" +
                     "</tr>"
                 $("div.postman div.request table."+tableclass+" tbody").append(content);
             }
@@ -156,9 +156,9 @@ $(document).ready(function() {
     })
     $("div.postman div.request table").on("click", "input[type='button']",function () {         //表格行删除
         var trid=$(this).attr("trid");
-        var tableclass=$(this).attr("class");
-        if ($("div.postman div.request table."+tableclass+" tr[trid="+trid+"]").next().length != 0){
-            $("div.postman div.request table."+tableclass+" tr[trid="+trid+"]").remove();
+        var tableclass=$(this).attr("tclass");
+        if ($("div.postman div.request table[class="+tableclass+"] tr[trid="+trid+"]").next().length != 0){
+            $("div.postman div.request table[class="+tableclass+"] tr[trid="+trid+"]").remove();
         }
     })
     $("div.postman div.label").on("click",function () {
@@ -202,4 +202,77 @@ $(document).ready(function() {
         }
         $("#p_url").val(host);
     })
+
+    //postman功能
+    $("div.postman div.request table.controler input.send").on("click",function (e) {
+        var pmmethod=$("#pm_metod").val();
+        var pmurl=$("#pm_url").val();
+        var pmheader=getdata('header');
+        if (pmmethod=='get'){
+            var pmdata=getdata('params');
+            $.ajax({
+                url:pmurl,
+                headers:pmheader,
+                type:'get',
+                data:pmdata,
+                success:function(data,status,xhr){
+                    var eeesss=xhr.getAllResponseHeaders();
+                    rsp_update(data,xhr)
+                },
+                error:function(xhr, status, error){
+                    rsp_update(error,xhr)
+                }
+            })}
+        if (pmmethod=='post'){
+            var pmdata=$("#req_body").val();
+            pmheader['Content-Type']=$("#req_body_type").val();
+            //将参数放到url上
+            var urlpar=getdata('params');
+            var urlpars=''
+            for (var up in urlpar){
+                urlpars += up + "=" + encodeURIComponent(urlpar[up]) + "&"
+            }
+            pmurl += "?" + urlpars.substring(0,urlpars.length-1);
+
+            $.ajax({
+                url:pmurl,
+                headers:pmheader,
+                type:'post',
+                data:pmdata,
+                success:function(data,status,xhr){
+                    var eeesss=xhr.getAllResponseHeaders();
+                    rsp_update(data,xhr)
+                },
+                error:function(xhr, status, error){
+                    rsp_update(error,xhr)
+                }
+            })
+        }
+    })
+    function getdata(table){
+        var data={};
+        ss="table." + table + " tbody";
+        $("table." + table + " tbody").children("tr").each(function () {
+            var key=$(this).find(".key").val();
+            var value=$(this).find(".value").val();
+            if (key !=''){
+                data[key]=value;
+            }
+        })
+        return data;
+    }
+    function rsp_update(data, xhr) {
+        if (xhr.getResponseHeader('content-type')=='application/json'){  //判断是否json格式
+		    var options = {
+		      collapsed: false,
+		      withQuotes: false
+		    };
+		    $('#rsp_rsp').jsonViewer(data, options);
+        }
+        else {
+            $('#rsp_rsp').text(data.toString());
+        }
+        var pmheader="<pre>"+xhr.getAllResponseHeaders()+"</pre>";
+        $("#rsp_header").html(pmheader);
+    }
 })

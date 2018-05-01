@@ -29,8 +29,9 @@ body,ol,ul,h1,h2,h3,h4,h5,h6,p,th,td,dl,dd,form,fieldset,legend,input,textarea,s
     height:calc(100% - 35px);
 
 }
-.mbutton{
-    background-color:#c1ebe8;
+
+div.left-menu div.mbutton{
+    /*background-color:#c1ebe8;*/
     width: 200px;
     height: 50px;
     font-size:18px;
@@ -39,8 +40,10 @@ body,ol,ul,h1,h2,h3,h4,h5,h6,p,th,td,dl,dd,form,fieldset,legend,input,textarea,s
     font-weight: bold;
 
 }
+div.left-menu div.mbutton[selected="selected"]{
+    /*background-color: #eb2702;*/
+}
 iframe{
     width: 100%;
     height:100%;
-
 }

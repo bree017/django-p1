@@ -7,11 +7,13 @@
     <link type="text/css" rel="styleSheet" href="{% static 'interfacetest/iframe/table.css' %}">
     <link type="text/css" rel="styleSheet" href="{% static 'interfacetest/iframe/interface_management/interface_management.css' %}">
     <link type="text/css" rel="styleSheet" href="{% static 'interfacetest/plugins/reveal/reveal.css' %}">
+    <link type="text/css" rel="styleSheet" href="{% static 'interfacetest/plugins/json-viewer/jquery.json-viewer.css' %}">
 
     <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="{% static 'interfacetest/iframe/interface_management/interface_management.js' %}"></script>
     <script src="{% static 'interfacetest/iframe/table.js' %}"></script>
     <script src="{% static 'interfacetest/plugins/reveal/jquery.reveal.js' %}"></script>
+    <script src="{% static 'interfacetest/plugins/json-viewer/jquery.json-viewer.js' %}"></script>
 </head>
 <body>
     <div class="top">接口管理
@@ -152,16 +154,16 @@
                 </tr></tbody>
             </table>
             <div class="params"><table class="params">
-                <tbody>
-                <tr>
+                <thead><tr>
                     <th>key</th>
                     <th>value</th>
                     <th width="30"></th>
-                </tr>
+                </tr></thead>
+                <tbody>
                 <tr trid="1">
-                    <td><input type="text" class="params" trid="1"></td>
-                    <td><input type="text" class="params" trid="1"></td>
-                    <td><input type="button" value="X" class="params" trid=1></td>
+                    <td><input type="text" class="key" tclass="params" trid="1"></td>
+                    <td><input type="text" class="value" tclass="params" trid="1"></td>
+                    <td><input type="button" value="X" class="delbtn" tclass="params" trid=1></td>
                 </tr>
                 </tbody>
             </table></div>
@@ -169,23 +171,23 @@
             <div class="label" labeltype="config">Body</div>
             <div class="config">
                 <table class="header"  hidden>
-                    <tbody>
-                    <tr>
+                    <thead><tr>
                         <th>key</th>
                         <th>value</th>
                         <th width="30"></th>
-                    </tr>
+                    </tr></thead>
+                    <tbody>
                     <tr trid="1">
-                        <td><input type="text" class="header" trid="1"></td>
-                        <td><input type="text" class="header" trid="1"></td>
-                        <td><input type="button" value="X" class="header" trid=1></td>
+                        <td><input type="text" class="key" tclass="header" trid="1"></td>
+                        <td><input type="text" class="value" tclass="header" trid="1"></td>
+                        <td><input type="button" value="X" class="delbtn" tclass="header" trid=1></td>
                     </tr>
                     </tbody>
                 </table>
                 <select class="body" id="req_body_type">
-                    <option value="json" selected="selected">application/json</option>
-                    <option value="123">text/plain</option>
-                    <option value="123">application/x-www-form-urlencoded</option>
+                    <option value="application/json" selected="selected">application/json</option>
+                    <option value="text/plain">text/plain</option>
+                    <option value="application/x-www-form-urlencoded">application/x-www-form-urlencoded</option>
                 </select>
                 <textarea class="body" id="req_body" cols="30" rows="10"></textarea>
             </div>
@@ -194,11 +196,9 @@
             <div class="label" labeltype="rsp">Response</div>
             <div class="label" labeltype="rsp">Header</div>
             <div class="rsp">
-                <div class="response" contenteditable="true" id="rsp_rsp" readonly="readonly">4165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465
-                4165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465
+                <div class="response" contenteditable="true" id="rsp_rsp" readonly="readonly">
                 </div>
-                <div class="header" contenteditable="true" id="rsp_header" readonly="readonly" hidden>1234564165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465
-                4165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465416546546541654654654165465465
+                <div class="header" contenteditable="true" id="rsp_header" readonly="readonly" hidden><pre></pre>
                 </div>
             </div>
         </div>

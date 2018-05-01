@@ -44,6 +44,7 @@ div.postman,div.postman div{
     padding:10px 5px 10px 5px;
     background-color: #D4FAFF;
     box-sizing:border-box;
+    overflow:auto;
 }
 div.postman div.request,div.postman div.responses{
     float:left;
@@ -77,4 +78,7 @@ div.postman div.request div.label,div.postman div.responses div.label{
     display: inline-block;
     border-bottom: none;
     cursor:default;
+}
+div.postman div.responses div.rsp div{
+    max-height: 700px;
 }
