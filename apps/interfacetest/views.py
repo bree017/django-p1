@@ -6,14 +6,20 @@ from apps.interfacetest.datastruct import ResultSet
 from django.core import serializers
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from itertools import chain
+from django.contrib.auth.decorators import login_required
 
 import json
 import datetime
 
 # Create your views here.
+def login(request):
+    return render(request,'interfacetest/login.html')
+
+@login_required
 def index(request):
     return render(request,'interfacetest/index.html')
 
+@login_required
 def settings(request):
     page = request.GET.get('page')
     contact_list = models.sysconfig.objects.all()  # 获取所有contacts,假设在models.py中已定义了Contacts模型
@@ -28,6 +34,7 @@ def settings(request):
         contacts = paginator.page(paginator.num_pages)
     return render(request,'interfacetest/iframe/settings.html',{'contacts': contacts})
 
+@login_required
 def ifmanage(request):
     try:
         page = request.GET.get('page')
@@ -63,6 +70,7 @@ def ifmanage(request):
         return render(request,'interfacetest/iframe/interface_management.html',{'contacts': contacts,'testsys':testsys,'filter':filter},)
     except Exception as e:
             return JsonResponse(ResultSet(0, str(e)).todict())
+
 #查询数据接口,不用了
 def getdata(request):
     try:
@@ -82,6 +90,7 @@ def getdata(request):
     except Exception as e:
         return JsonResponse(ResultSet(0, str(e)).todict())
 
+@login_required
 def postdata(request):
     try:
         if request.method != 'POST':return JsonResponse(ResultSet(0, '请求方式应该为POST').todict())

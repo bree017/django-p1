@@ -20,7 +20,7 @@ from . import view1
 from apps.interfacetest import views
 
 urlpatterns = [
-    # path(r'admin/', admin.site.urls),
+    path(r'admin/', admin.site.urls),
     url(r'^$',views.index),
     url(r'^settings/$',views.settings),
     url(r'^ifmanage/$',views.ifmanage),

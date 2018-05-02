@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'apps.interfacetest',
-    # 'pagination',
 ]
 
 MIDDLEWARE = [
@@ -83,9 +82,9 @@ DATABASES = {
         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         'ENGINE': 'mysql.connector.django',  # mysql.connector.django/django.db.backends.mysql
         'NAME': 'bgitest',
-        'USER': 'root',
-        'PASSWORD': 'root',
-        'HOST': 'localhost',
+        'USER': 'bree',
+        'PASSWORD': 'bree',
+        'HOST': '192.168.1.109',
         'PORT': '3306',
     }
 }
