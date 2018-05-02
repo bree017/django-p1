@@ -7,6 +7,7 @@ from django.core import serializers
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from itertools import chain
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login as ulogin
 
 import json
 import datetime
@@ -14,6 +15,19 @@ import datetime
 # Create your views here.
 def login(request):
     return render(request,'interfacetest/login.html')
+
+def userlogin(request):
+    username = request.POST.get('username')
+    password = request.POST.get('password')
+    user=authenticate(username=username, password=password)
+    if user is not None:
+        if user.is_active:
+            ulogin(request, user)
+            return JsonResponse(ResultSet(1,'',{'url':'..'}).todict())
+        else:
+            return JsonResponse(ResultSet(0, '用户未激活！').todict())
+    else:
+        return JsonResponse(ResultSet(0, '账号/密码错误！').todict())
 
 @login_required
 def index(request):

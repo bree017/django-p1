@@ -21,6 +21,8 @@ from apps.interfacetest import views
 
 urlpatterns = [
     path(r'admin/', admin.site.urls),
+    url(r'^login/$',views.login),
+    url(r'^login/userlogin/$',views.userlogin),
     url(r'^$',views.index),
     url(r'^settings/$',views.settings),
     url(r'^ifmanage/$',views.ifmanage),
