@@ -262,17 +262,23 @@ $(document).ready(function() {
         return data;
     }
     function rsp_update(data, xhr) {
-        if (xhr.getResponseHeader('content-type').indexOf('application/json')>=0){  //判断是否json格式
-		    var options = {
-		      collapsed: false,
-		      withQuotes: false
-		    };
-		    $('#rsp_rsp').jsonViewer(data, options);
+        var pmstatus=xhr.status;
+        if (xhr.status != 0){
+            if (xhr.getResponseHeader('content-type').indexOf('application/json')>=0){  //判断是否json格式
+                var options = {
+                  collapsed: false,
+                  withQuotes: false
+                };
+                $('#rsp_rsp').jsonViewer(data, options);
+            }
+            else {
+                $('#rsp_rsp').text(data.toString());
+            }
+            var pmheader="<pre>"+xhr.getAllResponseHeaders()+"</pre>";
+            $("#rsp_header").html(pmheader);
         }
-        else {
-            $('#rsp_rsp').text(data.toString());
+        else{
+            $('#rsp_rsp').text("404 Not Found");
         }
-        var pmheader="<pre>"+xhr.getAllResponseHeaders()+"</pre>";
-        $("#rsp_header").html(pmheader);
     }
 })

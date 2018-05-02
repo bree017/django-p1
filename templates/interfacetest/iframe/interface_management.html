@@ -30,7 +30,7 @@
             <tr>
                 <th>接口名：</th>
                 <td><input type="text" class="ifname" value={{ filter.ifname }}></td>
-                <th>URL：</th>
+                <th>接口地址：</th>
                 <td><input type="text" class="url" value={{ filter.url }}></td>
                 <th>测试系统：</th>
                 <td><select class="sysid" >
@@ -50,7 +50,7 @@
                     <th style="width:30px"><input type="checkbox" value=0></th>
                     <th style="width:200px">接口名</th>
                     <th style="width:300px">测试系统</th>
-                    <th style="width:200px">路径</th>
+                    <th style="width:200px">接口地址</th>
                     <th >备注</th>
                 </tr>
             </thead>
@@ -97,7 +97,7 @@
                         <option value={{ sys.id }}>{{ sys.sysname }}</option>
                     {% endfor %}
                 </select></td></tr>
-            <tr><td width="100">url：</td>
+            <tr><td width="100">接口地址：</td>
                 <td ><input type="text" id="p_url"></td></tr>
             <tr><td >备注：</td>
                 <td ><textarea id="p_remark"></textarea></td></tr>
