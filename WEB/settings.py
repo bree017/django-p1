@@ -83,9 +83,9 @@ DATABASES = {
         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         'ENGINE': 'mysql.connector.django',  # mysql.connector.django/django.db.backends.mysql
         'NAME': 'bgitest',
-        'USER': 'bree',
-        'PASSWORD': 'bree',
-        'HOST': '192.168.1.109',
+        'USER': 'root',
+        'PASSWORD': 'root',
+        'HOST': 'localhost',
         'PORT': '3306',
     }
 }

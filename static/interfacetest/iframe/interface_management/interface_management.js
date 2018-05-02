@@ -262,7 +262,7 @@ $(document).ready(function() {
         return data;
     }
     function rsp_update(data, xhr) {
-        if (xhr.getResponseHeader('content-type')=='application/json'){  //判断是否json格式
+        if (xhr.getResponseHeader('content-type').indexOf('application/json')>=0){  //判断是否json格式
 		    var options = {
 		      collapsed: false,
 		      withQuotes: false
