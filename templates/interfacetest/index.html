@@ -11,6 +11,7 @@
 <body>
     <div class="head-menu">
         <!--顶部-->
+        <a href="/admin" target="_blank" style="color: #C7F1FF;text-decoration:none;float: right;margin-right: 50px">用户管理</a>
     </div>
     <div class="left-menu">
         <!--侧边栏-->
@@ -21,10 +22,10 @@
         <!--<div class="mbutton">性能测试</div>-->
     </div>
     <div class="frame" iframe="settings" hidden>
-        <iframe src="settings" frameborder="0"></iframe>
+        <iframe src="{% url 'settings' %}" frameborder="0"></iframe>
     </div>
     <div class="frame" iframe="ifmanage">
-        <iframe src="ifmanage" frameborder="0"></iframe>
+        <iframe src="{% url 'ifmanage' %}" frameborder="0"></iframe>
     </div>
     <script>
         $('.left-menu > div').on({

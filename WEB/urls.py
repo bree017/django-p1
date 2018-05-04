@@ -18,14 +18,15 @@ from django.urls import path
 from django.conf.urls import url
 from . import view1
 from apps.interfacetest import views
+from django.contrib.auth.views import login,logout
 
 urlpatterns = [
-    path(r'admin/', admin.site.urls),
-    url(r'^login/$',views.login),
-    url(r'^login/userlogin/$',views.userlogin),
-    url(r'^$',views.index),
-    url(r'^settings/$',views.settings),
-    url(r'^ifmanage/$',views.ifmanage),
+    path(r'admin/', admin.site.urls,name="admin"),
+    url(r'^accounts/login/$', views.login,name="login"),
+    url(r'^userlogin/$',views.userlogin,name="userlogin"),
+    url(r'^$',views.index,name="index"),
+    url(r'^settings/$',views.settings,name="settings"),
+    url(r'^ifmanage/$',views.ifmanage,name="ifmanage"),
     url(r'^api/getdata$',views.getdata),
     url(r'^api/postdata$',views.postdata),
 ]

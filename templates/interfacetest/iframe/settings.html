@@ -19,6 +19,7 @@
         <input class="topinput" type="button" value="修改" id="btn_a" to-data-reveal-id="modal_a" data-animation="none">
         <input class="topinput" type="button" value="添加" id="btn_p" data-reveal-id="modal_p" data-animation="none">
         <input class="topinput" type="button" value="搜索" id="btn_s">
+        <input class="topinput" type="button" value="自定义" id="btn_u">
     </div>
     <div class="table">
         <table class="table">
@@ -27,6 +28,7 @@
                     <th style="width:30px"><input type="checkbox" value=0></th>
                     <th style="width:200px">系统</th>
                     <th style="width:200px">测试地址</th>
+                    <th style="width:200px">用户测试地址</th>
                     <th>备注</th>
                 </tr>
             </thead>
@@ -36,6 +38,7 @@
                         <td ><input type="checkbox" value={{ contact.id }}></td>
                         <td tdname="sysname">{{ contact.sysname }}</td>
                         <td tdname="host">{{ contact.host }}</td>
+                        <td tdname="usrhost" contenteditable="true"></td>
                         <td tdname="remark"><pre>{{ contact.remark  }}</pre></td>   {# 用pre标签处理换行符显示问题 #}
                     </tr>
                 {% endfor %}

@@ -8,6 +8,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from itertools import chain
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login as ulogin
+from django.contrib.auth.models import User
 
 import json
 import datetime
@@ -16,24 +17,26 @@ import datetime
 def login(request):
     return render(request,'interfacetest/login.html')
 
+#不用先
 def userlogin(request):
     username = request.POST.get('username')
     password = request.POST.get('password')
+    rdurl = request.POST.get('next')
     user=authenticate(username=username, password=password)
     if user is not None:
         if user.is_active:
             ulogin(request, user)
-            return JsonResponse(ResultSet(1,'',{'url':'..'}).todict())
+            return JsonResponse(ResultSet(1,'',{'url':rdurl}).todict())
         else:
             return JsonResponse(ResultSet(0, '用户未激活！').todict())
     else:
         return JsonResponse(ResultSet(0, '账号/密码错误！').todict())
 
-@login_required
+# @login_required
 def index(request):
     return render(request,'interfacetest/index.html')
 
-@login_required
+# @login_required
 def settings(request):
     page = request.GET.get('page')
     contact_list = models.sysconfig.objects.all()  # 获取所有contacts,假设在models.py中已定义了Contacts模型
@@ -48,7 +51,7 @@ def settings(request):
         contacts = paginator.page(paginator.num_pages)
     return render(request,'interfacetest/iframe/settings.html',{'contacts': contacts})
 
-@login_required
+# @login_required
 def ifmanage(request):
     try:
         page = request.GET.get('page')
@@ -104,7 +107,7 @@ def getdata(request):
     except Exception as e:
         return JsonResponse(ResultSet(0, str(e)).todict())
 
-@login_required
+# @login_required
 def postdata(request):
     try:
         if request.method != 'POST':return JsonResponse(ResultSet(0, '请求方式应该为POST').todict())
@@ -188,7 +191,27 @@ def postdata(request):
                 ids = id[0].split(',')
                 models.ifmanage.objects.filter(id__in=ids).delete()
                 return JsonResponse(ResultSet(1).todict())
+        if type[0] =='user':
+            if act[0] == 'url':
+                user=request.user
+                if user.id == None :return JsonResponse(ResultSet(0, '请先登录').todict())
+                urls = par.getlist('urls')
+                for url in urls:
+                    sys=models.sysconfig.objects.filter(id=urls.id)
+                    obj=models.user_host.objects.filter(user=user,sys=sys)
+                    if obj.count() > 0:
+                        obj.update(**{'host':url.host,'last_update_date':datetime.datetime.now()})
+                    else:
+                        data={
+                            'user':user,
+                            'sys':sys,
+                            'host':url.host
+                        }
+                        models.user_host.objects._insert(**data)
+                    return JsonResponse(ResultSet(1).todict())
         else:
             return JsonResponse(ResultSet(0, 'type参数有误').todict())
     except Exception as e:
         return JsonResponse(ResultSet(0, str(e)).todict())
+
+
