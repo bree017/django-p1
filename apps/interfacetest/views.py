@@ -89,7 +89,7 @@ def ifmanage(request):
 
         user = request.user
         userhost = models.user_host.objects.filter(user=user.id)
-        hostid =userhost.values_list('id',flat=True)
+        hostid =userhost.values_list('sys',flat=True)
         return render(request,'interfacetest/iframe/interface_management.html',{'contacts': contacts,'testsys':testsys,'filter':filter,'userhost':userhost,'hostid':hostid},)
     except Exception as e:
             return JsonResponse(ResultSet(0, str(e)).todict())

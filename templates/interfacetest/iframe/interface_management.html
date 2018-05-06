@@ -59,7 +59,7 @@
                     <tr trid={{ contact.id }}>
                         <td ><input type="checkbox" value={{ contact.id }}></td>
                         <td tdname="ifname">{{ contact.ifname }}</td>
-                        <td tdname="sysname" sysid={{ contact.sys.id }}>{{ contact.sys.sysname }}:{% if contact.sys.id in hostid %}{% for host in userhost %}{% if host.id == contact.sys.id %}{{ host.host }}{% endif %}{% endfor %}{% else %}{{ contact.sys.host }}{% endif %}</td>
+                        <td tdname="sysname" sysid={{ contact.sys.id }}>{{ contact.sys.sysname }}:{% if contact.sys.id in hostid %}{% for host in userhost %}{% if host.sys.id == contact.sys.id %}{{ host.host }}{% endif %}{% endfor %}{% else %}{{ contact.sys.host }}{% endif %}</td>
                         <td tdname="url">{{ contact.url }}</td>
                         <td tdname="remark"><pre>{{ contact.remark  }}</pre></td>   {# 用pre标签处理换行符显示问题 #}
                     </tr>
