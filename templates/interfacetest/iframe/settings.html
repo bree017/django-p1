@@ -38,7 +38,7 @@
                         <td ><input type="checkbox" value={{ contact.id }}></td>
                         <td tdname="sysname">{{ contact.sysname }}</td>
                         <td tdname="host">{{ contact.host }}</td>
-                        <td tdname="usrhost" contenteditable="true"></td>
+                        <td tdname="usrhost" contenteditable="true">{% for host in userhost %}{% if host.sys.id ==  contact.id %}{{ host.host }}{% endif %}{% endfor %}</td>
                         <td tdname="remark"><pre>{{ contact.remark  }}</pre></td>   {# 用pre标签处理换行符显示问题 #}
                     </tr>
                 {% endfor %}

@@ -111,4 +111,32 @@ $(document).ready(function() {
             }
         )
      })
+
+    $("#btn_u").on("click",function (e) {
+        var  urls={};
+        $("#data tr").each(function () {
+            var sys=$(this).attr("trid");
+            var usrhost=$(this).children("td[tdname='usrhost']").text();
+            if (usrhost !=''){              //这样一旦设置了就不能删掉了，考虑到对实际应用影响不大，就这么办先
+               urls[sys]=usrhost;
+            }
+        })
+        var data={
+            type:"user",
+            act:"url",
+            urls:JSON.stringify(urls)
+        };
+        $.post(
+            '../api/postdata',
+            data,
+            function(respon){
+                if (respon.issuccess == 1){
+                    window.location.reload();
+                }
+                else{
+                    alert(respon.errormsg);
+                }
+            }
+        )
+    })
 })

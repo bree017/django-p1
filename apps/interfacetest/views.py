@@ -41,6 +41,8 @@ def settings(request):
     page = request.GET.get('page')
     contact_list = models.sysconfig.objects.all()  # 获取所有contacts,假设在models.py中已定义了Contacts模型
     paginator = Paginator(contact_list, 20) # 每页20条
+    user=request.user
+    userhost=models.user_host.objects.filter(user=user.id)
     try:
         contacts = paginator.page(page) # contacts为Page对象！
     except PageNotAnInteger:
@@ -49,7 +51,7 @@ def settings(request):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         contacts = paginator.page(paginator.num_pages)
-    return render(request,'interfacetest/iframe/settings.html',{'contacts': contacts})
+    return render(request,'interfacetest/iframe/settings.html',{'contacts': contacts,"userhost":userhost})
 
 # @login_required
 def ifmanage(request):
@@ -84,7 +86,11 @@ def ifmanage(request):
         except EmptyPage:
             # If page is out of range (e.g. 9999), deliver last page of results.
             contacts = paginator.page(paginator.num_pages)
-        return render(request,'interfacetest/iframe/interface_management.html',{'contacts': contacts,'testsys':testsys,'filter':filter},)
+
+        user = request.user
+        userhost = models.user_host.objects.filter(user=user.id)
+        hostid =userhost.values_list('id',flat=True)
+        return render(request,'interfacetest/iframe/interface_management.html',{'contacts': contacts,'testsys':testsys,'filter':filter,'userhost':userhost,'hostid':hostid},)
     except Exception as e:
             return JsonResponse(ResultSet(0, str(e)).todict())
 
@@ -150,7 +156,7 @@ def postdata(request):
                 return JsonResponse(ResultSet(1).todict())
             else:
                 return JsonResponse(ResultSet(0, 'act参数有误').todict())
-        if type[0] =='ifmanage':
+        if type[0] == 'ifmanage':
             ifname = par.getlist('ifname')
             id = par.getlist('id')
             sysid = par.getlist('sysid')
@@ -193,22 +199,24 @@ def postdata(request):
                 return JsonResponse(ResultSet(1).todict())
         if type[0] =='user':
             if act[0] == 'url':
-                user=request.user
-                if user.id == None :return JsonResponse(ResultSet(0, '请先登录').todict())
-                urls = par.getlist('urls')
+                ruser=request.user
+                if ruser.id == None :return JsonResponse(ResultSet(0, '请先登录').todict())
+                urls = json.loads(par.getlist('urls')[0])
+                if urls=={} :return JsonResponse(ResultSet(1).todict())
                 for url in urls:
-                    sys=models.sysconfig.objects.filter(id=urls.id)
-                    obj=models.user_host.objects.filter(user=user,sys=sys)
+                    obj=models.user_host.objects.filter(user=ruser.id,sys=url)
                     if obj.count() > 0:
-                        obj.update(**{'host':url.host,'last_update_date':datetime.datetime.now()})
+                        obj.update(**{'host':urls[url],'last_update_date':datetime.datetime.now()})
                     else:
+                        sys = models.sysconfig.objects.get(id=url)
+                        user = User.objects.get(id=ruser.id)
                         data={
-                            'user':user,
-                            'sys':sys,
-                            'host':url.host
+                            "user":user,
+                            "sys":sys,
+                            "host":urls[url]
                         }
-                        models.user_host.objects._insert(**data)
-                    return JsonResponse(ResultSet(1).todict())
+                        models.user_host.objects.create(**data)
+                return JsonResponse(ResultSet(1).todict())
         else:
             return JsonResponse(ResultSet(0, 'type参数有误').todict())
     except Exception as e:

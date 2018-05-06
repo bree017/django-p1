@@ -6,4 +6,6 @@ $(document).ready(function() {
         $("div.frame").hide()
         $("div.frame[iframe=" + iframe +"]").show();
     })
+
+
 })

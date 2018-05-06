@@ -144,7 +144,6 @@ $(document).ready(function() {
         var tableclass=$(this).attr("tclass");
         if($(this).val() !=""){
             if ($("div.postman div.request table."+tableclass+" tr[trid="+trid+"]").next().length == 0){     //判断下一个兄弟元素是否不存在
-                console.log(ntrid);
                 content ="<tr trid="+ntrid+">" +
                     "<td><input type=\"text\" class='key' tclass="+tableclass+ " trid="+ntrid+"></td>" +
                     "<td><input type=\"text\" class='value' tclass="+tableclass+ " trid="+ntrid+"></td>" +
@@ -188,6 +187,8 @@ $(document).ready(function() {
         }
         event.stopPropagation();
     })
+
+
     $("#btn_p").on("click",function (e) {
         var url=$("#pm_url").val();
         //js正则不怎么会用，不支持（?<pattern）
@@ -204,6 +205,7 @@ $(document).ready(function() {
     })
 
     //postman功能
+    $.ajaxSetup({crossDomain: true, xhrFields: {withCredentials: true}});
     $("div.postman div.request table.controler input.send").on("click",function (e) {
         var pmmethod=$("#pm_metod").val();
         var pmurl=$("#pm_url").val();
