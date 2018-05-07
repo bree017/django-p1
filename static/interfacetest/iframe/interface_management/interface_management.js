@@ -265,7 +265,7 @@ $(document).ready(function() {
     }
     function rsp_update(data, xhr) {
         var pmstatus=xhr.status;
-        if (xhr.status != 0){
+        if (xhr.status != 0 && xhr.status!=404){
             if (xhr.getResponseHeader('content-type').indexOf('application/json')>=0){  //判断是否json格式
                 var options = {
                   collapsed: false,
@@ -282,5 +282,6 @@ $(document).ready(function() {
         else{
             $('#rsp_rsp').text("404 Not Found");
         }
+
     }
 })
