@@ -67,7 +67,7 @@ div.postman input[type="button"],div.postman select{
 div.postman table.controler #pm_url{
     width: 100%;
 }
-div.postman table.params input,div.postman table.header input{
+div.postman table input{
     width: 100%;
 }
 div.postman textarea{

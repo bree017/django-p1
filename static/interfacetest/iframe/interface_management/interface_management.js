@@ -172,6 +172,16 @@ $(document).ready(function() {
             }
         })
     })
+    $("#req_body_type").on("change",function (e) {
+        if($(this).val()=="application/x-www-form-urlencoded"){
+            $("div.postman div.request div.config div.body textarea.body").hide();
+            $("div.postman div.request div.config div.body table.body").show();
+        }
+        else{
+            $("div.postman div.request div.config div.body textarea.body").show();
+            $("div.postman div.request div.config div.body table.body").hide();
+        }
+    })
 
     //将接口信息与postman信息交互用户友好化
     $("table.table tbody tr input[type='checkbox']").on("click",function () {
@@ -226,7 +236,13 @@ $(document).ready(function() {
                 }
             })}
         if (pmmethod=='post'){
-            var pmdata=$("#req_body").val();
+            if ($("#req_body_type").val()=="application/x-www-form-urlencoded"){
+                var pmdata=getdata("body");
+            }
+            else{
+                var pmdata=$("#req_body").val();
+            }
+
             pmheader['Content-Type']=$("#req_body_type").val();
             //将参数放到url上
             var urlpar=getdata('params');

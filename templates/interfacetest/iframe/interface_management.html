@@ -170,7 +170,8 @@
             <div class="label" labeltype="config">Header</div>
             <div class="label" labeltype="config">Body</div>
             <div class="config">
-                <table class="header"  hidden>
+                <div class="header"  hidden>
+                <table class="header">
                     <thead><tr>
                         <th>key</th>
                         <th>value</th>
@@ -184,12 +185,29 @@
                     </tr>
                     </tbody>
                 </table>
-                <select class="body" id="req_body_type">
-                    <option value="application/json" selected="selected">application/json</option>
-                    <option value="text/plain">text/plain</option>
-                    <option value="application/x-www-form-urlencoded">application/x-www-form-urlencoded</option>
-                </select>
-                <textarea class="body" id="req_body" cols="30" rows="10"></textarea>
+                </div>
+                <div class="body" >
+                    <select class="body" id="req_body_type">
+                        <option value="application/json" selected="selected">application/json</option>
+                        <option value="text/plain">text/plain</option>
+                        <option value="application/x-www-form-urlencoded">application/x-www-form-urlencoded</option>
+                    </select>
+                    <textarea class="body" id="req_body" cols="30" rows="10"></textarea>
+                    <table class="body" hidden>
+                        <thead><tr>
+                        <th>key</th>
+                        <th>value</th>
+                        <th width="30"></th>
+                        </tr></thead>
+                    <tbody>
+                    <tr trid="1">
+                        <td><input type="text" class="key" tclass="body" trid="1"></td>
+                        <td><input type="text" class="value" tclass="body" trid="1"></td>
+                        <td><input type="button" value="X" class="delbtn" tclass="body" trid=1></td>
+                    </tr>
+                    </tbody>
+                    </table>
+                </div>
             </div>
         </div>
         <div class="responses">
