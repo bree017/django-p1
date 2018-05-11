@@ -82,3 +82,8 @@ div.postman div.request div.label,div.postman div.responses div.label{
 div.postman div.responses div.rsp div{
     max-height: 700px;
 }
+
+#add_case{
+    float: right;
+    height:30px;
+}

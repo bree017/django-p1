@@ -32,3 +32,22 @@ class user_host(models.Model):
     last_update_date=models.DateTimeField(default='1000-01-01 00:00:00')
     class Meta:
         db_table = 'user_host'
+
+class test_case(models.Model):
+    interface = models.ForeignKey(ifmanage,on_delete=models.CASCADE)
+    method = models.CharField(max_length=30,default='POST')
+    param=models.CharField(max_length=1000,default='')
+    header =models.CharField(max_length=1000,default='')
+    body =models.CharField(max_length=1000,default='')
+    cookie =models.CharField(max_length=1000,default='')
+    expect =models.CharField(max_length=1000,default='')
+    response = models.CharField(max_length=1000,default='')
+    result = models.CharField(max_length=30,default='')
+    isdefault = models.BooleanField(default=0)
+    isactive = models.BooleanField(default=1)
+    start_time =models.DateTimeField(default='1000-01-01 00:00:00')
+    end_time =models.DateTimeField(default='1000-01-01 00:00:00')
+    created_date=models.DateTimeField(default=datetime.datetime.now)
+    last_update_date=models.DateTimeField(default='1000-01-01 00:00:00')
+    class Meta:
+        db_table = 'test_case'

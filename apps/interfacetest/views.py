@@ -197,7 +197,7 @@ def postdata(request):
                 ids = id[0].split(',')
                 models.ifmanage.objects.filter(id__in=ids).delete()
                 return JsonResponse(ResultSet(1).todict())
-        if type[0] =='user':
+        if type[0] == 'user':
             if act[0] == 'url':
                 ruser=request.user
                 if ruser.id == None :return JsonResponse(ResultSet(0, '请先登录').todict())
@@ -216,6 +216,28 @@ def postdata(request):
                             "host":urls[url]
                         }
                         models.user_host.objects.create(**data)
+                return JsonResponse(ResultSet(1).todict())
+        if type[0] == 'testcase':
+            if act[0] == 'add':
+                interfaceid= par.getlist('interfaceid')
+                if not interfaceid : return JsonResponse(ResultSet(0, 'interfaceid参数有误1').todict())
+                if interfaceid[0] == '': return JsonResponse(ResultSet(0, 'interfaceid参数有误2').todict())
+                data ={
+                    'interface':models.ifmanage.objects.get(id=int(interfaceid[0])),
+                    'method':(par.getlist('method'))and (par.getlist('method')[0]) or 1,
+                    'param':(par.getlist('param')) and par.getlist('param')[0] or '',
+                    'header':(par.getlist('header')) and par.getlist('header')[0] or '',
+                    'body':(par.getlist('body')) and par.getlist('body')[0] or '',
+                    'cookie':(par.getlist('cookie')) and par.getlist('cookie')[0] or '',
+                    'expect':(par.getlist('expect')) and par.getlist('expect')[0] or '',
+                    'isdefault':(par.getlist('isdefault')) and par.getlist('isdefault')[0] or 0,
+                    'isactive':(par.getlist('isactive')) and par.getlist('isactive')[0] or 1
+                }
+                case = models.test_case.objects.filter(interface=interfaceid[0],isdefault=1)
+                if case.count() > 0 and par.getlist('isdefault')[0]:
+                    case.update(**data)
+                else:
+                    models.test_case.objects.create(**data)
                 return JsonResponse(ResultSet(1).todict())
         else:
             return JsonResponse(ResultSet(0, 'type参数有误').todict())

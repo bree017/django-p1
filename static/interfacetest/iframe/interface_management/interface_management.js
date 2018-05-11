@@ -197,8 +197,6 @@ $(document).ready(function() {
         }
         event.stopPropagation();
     })
-
-
     $("#btn_p").on("click",function (e) {
         var url=$("#pm_url").val();
         //js正则不怎么会用，不支持（?<pattern）
@@ -215,7 +213,7 @@ $(document).ready(function() {
     })
 
     //postman功能
-    $.ajaxSetup({crossDomain: true, xhrFields: {withCredentials: true}});
+    $.ajaxSetup({crossDomain: true, xhrFields: {withCredentials: true}});  //支持跨域
     $("div.postman div.request table.controler input.send").on("click",function (e) {
         var pmmethod=$("#pm_metod").val();
         var pmurl=$("#pm_url").val();
@@ -300,4 +298,50 @@ $(document).ready(function() {
         }
 
     }
+
+    $("#add_case").on("click",function (e) {
+        var chk_value =new Array();
+        $("table.table input[type='checkbox']:checked").each(
+            function(){
+                chk_value.push($(this).val());
+            }
+        )
+        if (chk_value.length != 1){
+            alert('请选择一条数据');
+            return;
+        }
+        if($('#req_body_type').val()=='application/x-www-form-urlencoded'){
+            var bodydata=JSON.stringify(getdata('body'));
+        }
+        else{
+            var bodydata=$('#req_body').val();
+        }
+        var body={
+            type:$('#req_body_type').val(),
+            data:bodydata
+        }
+        data ={
+            'type':'testcase',
+            'act':'add',
+            'interfaceid':chk_value[0],
+            'method':$("#pm_metod").val(),
+            'param':JSON.stringify(getdata('params')),
+            'header':JSON.stringify(getdata('header')),
+            'body':JSON.stringify(body),
+            'isdefault':1,
+            'isactive':1
+        }
+        $.post(
+            '../api/postdata',
+            data,
+            function(respon){
+                if (respon.issuccess == 1){
+                    alert('添加成功');
+                }
+                else{
+                    alert(respon.errormsg);
+                }
+            }
+        )
+    })
 })
