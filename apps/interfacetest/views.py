@@ -9,6 +9,7 @@ from itertools import chain
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login as ulogin
 from django.contrib.auth.models import User
+from django.forms.models import model_to_dict
 
 import json
 import datetime
@@ -94,22 +95,28 @@ def ifmanage(request):
     except Exception as e:
             return JsonResponse(ResultSet(0, str(e)).todict())
 
-#查询数据接口,不用了
+
 def getdata(request):
     try:
-        if request.method == 'GET':
-            par = request.GET
-            gettype = par.getlist('type')
-            if gettype == []:
-                return JsonResponse(ResultSet(0, 'type字段不能为空').todict())
-            elif gettype[0] == 'settings':       #只获取第一个作为type参数
-                data = serializers.serialize('json', models.sysconfig.objects.all())
-                # 为了重新构造json将data又转换回字符串了，就导致消耗多余的系统资源，以后再优化
-                return JsonResponse(ResultSet(1, '',json.loads(data)).todict())
-            else:
-                return JsonResponse(ResultSet(0, 'type字段有误').todict())
-        else:
-            return JsonResponse(ResultSet(0,'请求方式应该为GET').todict())
+        if request.method != 'GET':return JsonResponse(ResultSet(0, '请求方式应该为GET').todict())
+        par = request.GET
+        type = par.getlist('type')
+        if not type or type[0] =='':return JsonResponse(ResultSet(0, 'type参数必填').todict())
+        if type[0] == 'testcase':       #只获取第一个作为type参数
+            ids=par.getlist('ids')[0].split(',')
+            data =[]
+            for id in ids:
+                try:
+                    objlist=[]
+                    for obj in models.test_case.objects.filter(interface_id=id):
+                        objlist.append(model_to_dict(obj))
+                    result=ResultSet(1,'',objlist).todict()
+                except Exception as e:
+                    result = ResultSet(0,str(e)).todict()
+                data.append(result)
+            return JsonResponse(data,safe=False)
+        else :
+            return JsonResponse(ResultSet(0, 'type参数有误').todict())
     except Exception as e:
         return JsonResponse(ResultSet(0, str(e)).todict())
 

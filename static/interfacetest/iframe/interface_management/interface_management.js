@@ -192,9 +192,50 @@ $(document).ready(function() {
         var path=$("table.table tr[trid="+trid+"] td[tdname='url']").text();
         if (path.substr(0,1)!='/' ){path ='/'+path;}
         if ($(this).is(':checked')){
-
             $("#pm_url").val(host+path);
+            $.get(
+                "../api/getdata",
+                {"type":"testcase","ids":trid,},
+                function (rsp) {
+                    if (rsp.issuccess != 0){
+                        var data=rsp[0].data;
+                        if(data.length != 0)
+                        {
+                            for (i in data){
+                              if (data[i].isdefault == 1){
+                                    var method=data[i].method.toLowerCase();
+                                    var param=$.parseJSON(data[i].param);
+                                    var header=$.parseJSON(data[i].header);
+                                    var body=$.parseJSON(data[i].body);
+                                }
+                            }
+                            $("#pm_metod").val(method);
+                            update("params",param);
+                            update("header",header);
+                            $("#req_body_type").val(body.type)
+                            $("#req_body_type").trigger("change");
+                            if (body.type == 'application/x-www-form-urlencoded'){
+                                update("body",$.parseJSON(body.data));
+                            }
+                            else {
+                                $("#req_body").val(body.data);
+                            }
+                        }
+                        // else{                //想一下还是不要置空了
+                        //     $("#pm_metod").val('post');
+                        //     update("params",{});
+                        //     update("header",{});
+                        //     update("body",{});
+                        //     $("#req_body").val('');
+                        // }
+                    }
+                    else{
+                        alert(rsp.errormsg);
+                    }
+            }
+        )
         }
+
         event.stopPropagation();
     })
     $("#btn_p").on("click",function (e) {
@@ -265,9 +306,8 @@ $(document).ready(function() {
             })
         }
     })
-    function getdata(table){
+    function getdata(table){    //获取table数据
         var data={};
-        ss="table." + table + " tbody";
         $("table." + table + " tbody").children("tr").each(function () {
             var key=$(this).find(".key").val();
             var value=$(this).find(".value").val();
@@ -276,6 +316,26 @@ $(document).ready(function() {
             }
         })
         return data;
+    }
+    function update(table,dit){     //更新table数据
+        $("table." + table + " tbody").html('');
+        var id=1;
+        for (i in dit){
+            content ="<tr trid="+id+">" +
+                "<td><input type=\"text\" class='key' tclass="+table+ " trid="+id+" value="+i+"></td>" +
+                "<td><input type=\"text\" class='value' tclass="+table+ " trid="+id+" value="+dit[i]+"></td>" +
+                "<td><input type=\"button\" value=\"X\" class='delbtn' tclass="+table+ " trid="+i+"></td>" +
+                "</tr>"
+            $("table." + table + " tbody").append(content);
+            id++
+        }
+        content ="<tr trid="+id+">" +
+            "<td><input type=\"text\" class='key' tclass="+table+ " trid="+id+"></td>" +
+            "<td><input type=\"text\" class='value' tclass="+table+ " trid="+id+"></td>" +
+            "<td><input type=\"button\" value=\"X\" class='delbtn' tclass="+table+ " trid="+i+"></td>" +
+            "</tr>"
+        $("table." + table + " tbody").append(content);
+
     }
     function rsp_update(data, xhr) {
         var pmstatus=xhr.status;
