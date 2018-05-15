@@ -23,7 +23,8 @@ $(document).ready(function() {
         var ifname = $("input.ifname").val();
         var url = $("input.url").val();
         var sysid = $("select.sysid").val();
-        var url = "?ifname="+ifname+"&url="+url+"&sysid="+sysid;
+        var remark = $("input.remark").val();
+        var url = "?ifname="+ifname+"&url="+url+"&sysid="+sysid+"&remark="+remark;
         window.location.href=url;
     })
 

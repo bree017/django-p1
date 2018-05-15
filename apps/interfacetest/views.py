@@ -61,6 +61,7 @@ def ifmanage(request):
         ifname = request.GET.get('ifname')
         url = request.GET.get('url')
         sysid = request.GET.get('sysid')
+        remark = request.GET.get('remark')
 
         contact_list = models.ifmanage.objects.all()
         if ifname == None or ifname == '':
@@ -76,7 +77,12 @@ def ifmanage(request):
         else:
             sysid=int(sysid)
             contact_list = contact_list.filter(sys=sysid)
-        filter ={'ifname':ifname,'url':url,'sysid':sysid}
+        if remark == None or remark == '':
+            remark = ''
+        else:
+            contact_list = contact_list.filter(remark__contains=remark)
+
+        filter ={'ifname':ifname,'url':url,'sysid':sysid,'remark':remark}
         testsys=models.sysconfig.objects.values('id','sysname').distinct()
         paginator = Paginator(contact_list, 10) # 每页20条
         try:
