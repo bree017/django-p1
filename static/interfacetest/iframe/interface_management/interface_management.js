@@ -259,6 +259,8 @@ $(document).ready(function() {
         var pmmethod=$("#pm_metod").val();
         var pmurl=$("#pm_url").val();
         var pmheader=getdata('header');
+        $("#rsp_header").html('');
+        $('#rsp_rsp').text("sending...");
         if (pmmethod=='get'){
             var pmdata=getdata('params');
             $.ajax({
@@ -267,7 +269,6 @@ $(document).ready(function() {
                 type:'get',
                 data:pmdata,
                 success:function(data,status,xhr){
-                    var eeesss=xhr.getAllResponseHeaders();
                     rsp_update(data,xhr)
                 },
                 error:function(xhr, status, error){
@@ -324,7 +325,7 @@ $(document).ready(function() {
             content ="<tr trid="+id+">" +
                 "<td><input type=\"text\" class='key' tclass="+table+ " trid="+id+" value="+i+"></td>" +
                 "<td><input type=\"text\" class='value' tclass="+table+ " trid="+id+" value="+dit[i]+"></td>" +
-                "<td><input type=\"button\" value=\"X\" class='delbtn' tclass="+table+ " trid="+i+"></td>" +
+                "<td><input type=\"button\" value=\"X\" class='delbtn' tclass="+table+ " trid="+id+"></td>" +
                 "</tr>"
             $("table." + table + " tbody").append(content);
             id++
@@ -332,13 +333,12 @@ $(document).ready(function() {
         content ="<tr trid="+id+">" +
             "<td><input type=\"text\" class='key' tclass="+table+ " trid="+id+"></td>" +
             "<td><input type=\"text\" class='value' tclass="+table+ " trid="+id+"></td>" +
-            "<td><input type=\"button\" value=\"X\" class='delbtn' tclass="+table+ " trid="+i+"></td>" +
+            "<td><input type=\"button\" value=\"X\" class='delbtn' tclass="+table+ " trid="+id+"></td>" +
             "</tr>"
         $("table." + table + " tbody").append(content);
 
     }
     function rsp_update(data, xhr) {
-        var pmstatus=xhr.status;
         if (xhr.status != 0 && xhr.status!=404){
             if (xhr.getResponseHeader('content-type').indexOf('application/json')>=0){  //判断是否json格式
                 var options = {
