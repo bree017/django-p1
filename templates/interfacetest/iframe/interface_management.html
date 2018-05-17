@@ -39,6 +39,8 @@
                         <option value={{ sys.id }} {% if sys.id ==  filter.sysid %} selected="selected"{% endif %}>{{ sys.sysname }}</option>
                     {% endfor %}
                 </select></td>
+                <th>备注：</th>
+                <td><input type="text" class="remark" value={{ filter.remark }}></td>
             </tr>
             </tbody>
         </table>
