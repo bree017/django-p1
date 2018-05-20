@@ -27,6 +27,7 @@ urlpatterns = [
     url(r'^$',views.index,name="index"),
     url(r'^settings/$',views.settings,name="settings"),
     url(r'^ifmanage/$',views.ifmanage,name="ifmanage"),
+    url(r'^testcase/$',views.testcase,name="testcase"),
     url(r'^api/getdata$',views.getdata),
     url(r'^api/postdata$',views.postdata),
 ]

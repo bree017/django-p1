@@ -49,5 +49,6 @@ class test_case(models.Model):
     end_time =models.DateTimeField(default='1000-01-01 00:00:00')
     created_date=models.DateTimeField(default=datetime.datetime.now)
     last_update_date=models.DateTimeField(default='1000-01-01 00:00:00')
+    remark = models.CharField(max_length=1000,default='')
     class Meta:
         db_table = 'test_case'

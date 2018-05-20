@@ -1,0 +1,187 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用例管理</title>
+    <link type="text/css" rel="styleSheet" href="{% static 'interfacetest/iframe/table.css' %}">
+    <link type="text/css" rel="styleSheet" href="{% static 'interfacetest/iframe/test_case/test_case.css' %}">
+    <link type="text/css" rel="styleSheet" href="{% static 'interfacetest/plugins/reveal/reveal.css' %}">
+    <link type="text/css" rel="styleSheet" href="{% static 'interfacetest/plugins/paging/style.css' %}">
+
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="{% static 'interfacetest/iframe/table.js' %}"></script>
+    <script src="{% static 'interfacetest/iframe/test_case/test_case.js' %}"></script>
+    <script src="{% static 'interfacetest/plugins/reveal/jquery.reveal.js' %}"></script>
+    <script src="{% static 'interfacetest/plugins/paging/paging.js' %}"></script>
+</head>
+<body>
+    <div class="top">用例管理
+    <input class="topinput" type="button" value="删除" id="btn_d" to-data-reveal-id="modal_d" data-animation="none">
+    <input class="topinput" type="button" value="修改" id="btn_a" to-data-reveal-id="modal_a" data-animation="none">
+    <input class="topinput" type="button" value="添加" id="btn_p" data-reveal-id="modal_p" data-animation="none">
+    <input class="topinput" type="button" value="搜索" id="btn_s">
+    <input class="topinput" type="button" value="清空" id="btn_c">
+    </div>
+
+    <div class="filter">
+        <table class="filter">
+            <tbody>
+            <tr>
+                <th>接口名：</th>
+                <td><input type="text" class="ifname" value={{ filter.ifname }}></td>
+                <th>接口地址：</th>
+                <td><input type="text" class="url" value={{ filter.url }}></td>
+                <th>测试系统：</th>
+                <td><select class="sysid" >
+                    <option value=0>ALL</option>
+                    {% for sys in testsys %}
+                        <option value={{ sys.id }} {% if sys.id ==  filter.sysid %} selected="selected"{% endif %}>{{ sys.sysname }}</option>
+                    {% endfor %}
+                </select></td>
+                <th>备注：</th>
+                <td><input type="text" class="remark" value={{ filter.remark }}></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="table">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th style="width:200px">接口名</th>
+                    <th style="width:300px">测试系统</th>
+                    <th style="width:200px">接口地址</th>
+                    <th >备注</th>
+                </tr>
+            </thead>
+            <tbody id="data">
+                {% for contact in contacts %}
+                    <tr trid={{ contact.id }}>
+                        <td tdname="ifname">{{ contact.ifname }}</td>
+                        <td tdname="sysname" sysid={{ contact.sys.id }}>{{ contact.sys.sysname }}:{% if contact.sys.id in hostid %}{% for host in userhost %}{% if host.sys.id == contact.sys.id %}{{ host.host }}{% endif %}{% endfor %}{% else %}{{ contact.sys.host }}{% endif %}</td>
+                        <td tdname="url">{{ contact.url }}</td>
+                        <td tdname="remark"><pre>{{ contact.remark  }}</pre></td>   {# 用pre标签处理换行符显示问题 #}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="pagination">        {# 后面改善一下外观 #}
+        <span class="step-links">
+            {% if contacts.has_previous %}
+                <button id="prev" page={{ contacts.previous_page_number }}>prev</button>
+            {% endif %}
+
+            <span class="current">
+                Page {{ contacts.number }} of {{ contacts.paginator.num_pages }}.
+            </span>
+
+            {% if contacts.has_next %}
+                <button id="next" page={{ contacts.next_page_number }}>next</button>
+
+            {% endif %}
+        </span>
+    </div>
+    <div class="table">
+        <table class="testcase">
+             <thead>
+                <tr>
+                    <th style="width:30px"><input type="checkbox" value=0></th>
+                    <th style="width:50px">ID</th>
+                    <th style="width:50px">请求方法</th>
+                    <th style="width:200px">url参数</th>
+                    <th style="width:100px">请求头</th>
+                    <th style="width:200px">body</th>
+                    <th style="width:200px">cookie</th>
+                    <th style="width:200px">预期结果</th>
+                    <th style="width:50px">是否默认</th>
+                    <th style="width:50px">是否激活</th>
+                    <th >备注</th>
+                </tr>
+            </thead>
+            <tbody id="tcdata">
+                <tr trid="0">
+                    <td><input type="checkbox" value=0></td>
+                    <td tdname="id">2</td>
+                    <td tdname="method">3</td>
+                    <td tdname="param">4</td>
+                    <td tdname="header">5</td>
+                    <td tdname="body">6</td>
+                    <td tdname="cookie">7</td>
+                    <td tdname="expect">8</td>
+                    <td tdname="isdefault">9</td>
+                    <td tdname="isactive">10</td>
+                    <td tdname="remark"><pre>11</pre></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="paging">
+        <div class="first">首页</div>
+        <div class="prev">上一页</div>
+        <ul class="list"></ul><div class="go">
+          <input type="text" placeholder="Goto">
+          <button>跳转</button>
+        </div>
+        <div class="next">下一页</div>
+        <div class="last">末页</div>
+    </div>
+    {#弹窗#}
+    <div id="modal_p" class="reveal-modal" >
+        <h1 class="modal">添加</h1>
+        <table class="modal">
+            <tr><td width="100">接口名：</td>
+                <td ><input type="text" id="p_ifname"></td></tr>
+            <tr><td >测试系统：</td>
+                <td ><select name="" id="p_sysid">
+                    {% for sys in testsys %}
+                        <option value={{ sys.id }}>{{ sys.sysname }}</option>
+                    {% endfor %}
+                </select></td></tr>
+            <tr><td width="100">接口地址：</td>
+                <td ><input type="text" id="p_url"></td></tr>
+            <tr><td >备注：</td>
+                <td ><textarea id="p_remark"></textarea></td></tr>
+        </table>
+        <div class="modal">
+        <input type="button" value="确定" >
+        <input type="button" value="取消" class="close-reveal-modal">
+        </div>
+        <a class="close-reveal-modal">&#215;</a>
+    </div>
+    <div id="modal_a" class="reveal-modal" >
+        <h1 class="modal">修改</h1>
+
+        <table class="modal">
+            <tr><td width="100">接口名：</td>
+                <td ><input type="text" id="a_ifname"></td></tr>
+            <tr><td >测试系统：</td>
+                <td ><select name="" id="a_sysid" value="0">
+                    {% for sys in testsys %}
+                        <option value={{ sys.id }}>{{ sys.sysname }}</option>
+                    {% endfor %}
+                </select></td></tr>
+            <tr><td width="100">url：</td>
+                <td ><input type="text" id="a_url"></td></tr>
+            <tr><td >备注：</td>
+                <td ><textarea id="a_remark"></textarea></td></tr>
+        </table>
+        <div class="modal">
+        <input type="button" value="确定" >
+        <input type="button" value="取消" class="close-reveal-modal">
+        </div>
+        <a class="close-reveal-modal">&#215;</a>
+    </div>
+    <div id="modal_d" class="reveal-modal" >
+        <h1 class="modal">删除</h1>
+        <h4>确定删除数据？</h4>
+        <div class="modal">
+        <input type="button" value="确定" >
+        <input type="button" value="取消" class="close-reveal-modal">
+        </div>
+        <a class="close-reveal-modal">&#215;</a>
+    </div>
+</body>
+</html>

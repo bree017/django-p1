@@ -1,23 +1,24 @@
 $(document).ready(function() {
-    $("table.table tbody tr").on("click",function () {
-        $(this).find('input[type="checkbox"]').click();
-    })
-    $("table.table tbody tr input[type='checkbox']").on("click",function () {  //阻止事件冒泡
+    $("div.table tbody").on("click","tr input[type='checkbox']",function (event) {  //阻止事件冒泡
         trid=$(this).val();
         if ($(this).is(':checked')){
-            $("table.table tbody tr[trid='"+trid+"']").attr('selected',true);
+            $("div.table tbody tr[trid='"+trid+"']").attr('selected',true);
         }
         else {
-            $("table.table tbody tr[trid='"+trid+"']").attr('selected',false);
+            $("div.table tbody tr[trid='"+trid+"']").attr('selected',false);
         }
-        event.stopPropagation();
+        event.stopImmediatePropagation();
     })
-    $("table.table thead th input[type='checkbox']").on("click",function () {
+    $("div.table tbody").on("click","tr",function () {
+         $(this).find('input[type="checkbox"]').trigger("click");
+         // event.stopPropagation();
+    })
+    $("div.table thead th").on("click","input[type='checkbox']",function () {
         if ($(this).is(':checked')){
-            $("table.table tbody tr input[type='checkbox']:not(:checked)").click();
+            $("div.table tbody tr input[type='checkbox']:not(:checked)").trigger("click");
         }
         else{
-            $("table.table tbody tr input[type='checkbox']:checked").click();
+            $("div.table tbody tr input[type='checkbox']:checked").trigger("click");
         }
     })
 })
