@@ -101,6 +101,52 @@ def ifmanage(request):
     except Exception as e:
             return JsonResponse(ResultSet(0, str(e)).todict())
 
+# @login_required
+def testcase(request):
+    try:
+        page = request.GET.get('page')
+        ifname = request.GET.get('ifname')
+        url = request.GET.get('url')
+        sysid = request.GET.get('sysid')
+        remark = request.GET.get('remark')
+
+        contact_list = models.ifmanage.objects.all()
+        if ifname == None or ifname == '':
+            ifname = ''
+        else:
+            contact_list = contact_list.filter(ifname__contains=ifname)
+        if url == None or url == '':
+            url = ''
+        else:
+            contact_list = contact_list.filter(url__contains=url)
+        if sysid == None or sysid == '0':
+            sysid = 0
+        else:
+            sysid=int(sysid)
+            contact_list = contact_list.filter(sys=sysid)
+        if remark == None or remark == '':
+            remark = ''
+        else:
+            contact_list = contact_list.filter(remark__contains=remark)
+
+        filter ={'ifname':ifname,'url':url,'sysid':sysid,'remark':remark}
+        testsys=models.sysconfig.objects.values('id','sysname').distinct()
+        paginator = Paginator(contact_list, 10) # 每页20条
+        try:
+            contacts = paginator.page(page) # contacts为Page对象！
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            contacts = paginator.page(1)
+        except EmptyPage:
+            # If page is out of range (e.g. 9999), deliver last page of results.
+            contacts = paginator.page(paginator.num_pages)
+
+        user = request.user
+        userhost = models.user_host.objects.filter(user=user.id)
+        hostid =userhost.values_list('sys',flat=True)
+        return render(request,'interfacetest/iframe/test_case.html',{'contacts': contacts,'testsys':testsys,'filter':filter,'userhost':userhost,'hostid':hostid},)
+    except Exception as e:
+            return JsonResponse(ResultSet(0, str(e)).todict())
 
 def getdata(request):
     try:

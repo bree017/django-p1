@@ -7,7 +7,7 @@ table{
     width: 100%;
 }
 
-table.table
+div.table table
 {
     border-collapse: collapse;
     margin: 0 auto;
@@ -19,27 +19,27 @@ table.table
     overflow:auto;
     width:100%;
 }
-table.table td, table.table th
+div.table td, div.table th
 {
     border: 1px solid #cad9ea;
     color: #666;
     height: 30px;
     position:static;
 }
-table.table thead th
+div.table thead th
 {
     background-color: #CCE8EB;
 }
 
-table.table tr:nth-child(odd)
+div.table tr:nth-child(odd)
 {
     background: #fff;
 }
-table.table tr:nth-child(even)
+div.table tr:nth-child(even)
 {
     background: #F5FAFA;
 }
-table.table tr[selected="selected"]{
+div.table tr[selected="selected"]{
     background: #C7F1FF;
 }
 /*条件筛选*/
@@ -112,4 +112,9 @@ pre{                    /*使pre标签在td中换行*/
     white-space: -pre-wrap;
     white-space: -o-pre-wrap;
     word-wrap: break-word;
+}
+
+div.pagination{
+    padding-bottom: 20px;
+    border-bottom: double #c3c3c3;
 }

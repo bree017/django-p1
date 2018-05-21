@@ -1,34 +1,85 @@
 $(document).ready(function() {
+    //用paging插件
+    $("div.table table.table tbody tr").on("click",function (e) {
+        $("div.table table.table tbody tr").each(function (e) {
+            $(this).attr("selected",false);
+        })
+        $(this).attr("selected",true);
+        var trid= $(this).attr("trid");
+        var eachpagecount=10;        //每页10行
+        $.get(
+            '../api/getdata',
+            {"type":"testcase","ids":trid},
+            function (rsp) {
+                if (rsp.issuccess != 0) {
+                    var data = rsp[0].data;
+                    if (data.length != 0) {
+                        $('#paging').clearpaging();  //初始化paging
+                        $('#paging').paging({
+                            nowPage: 1,
+                            allPages: Math.ceil(data.length / eachpagecount),
+                            displayPage: eachpagecount,
+                            callBack: function (now) {
+                                $("#tcdata").html("");
+                                var currentPages = now * eachpagecount < data.length ? eachpagecount : data.length - (now - 1) * eachpagecount;
+                                for (var i = 0; i < currentPages; i++) {
+                                    var num = (now - 1) * eachpagecount + i;
+                                    var _html = '<tr trid=' + data[num].id + '>' +
+                                        '<td><input type="checkbox" value=' + data[num].id + '></td>' +
+                                        '<td tdname="id">' + data[num].id + '</td>' +
+                                        '<td tdname="method">' + data[num].method + '</td>' +
+                                        '<td tdname="param">' + data[num].param + '</td>' +
+                                        '<td tdname="header">' + data[num].header + '</td>' +
+                                        '<td tdname="body">' + data[num].body + '</td>' +
+                                        '<td tdname="cookie">' + data[num].cookie + '</td>' +
+                                        '<td tdname="expect">' + data[num].expect + '</td>' +
+                                        '<td tdname="isdefault">' + data[num].isdefault + '</td>' +
+                                        '<td tdname="isactive">' + data[num].isactive + '</td>' +
+                                        '<td tdname="remark"><pre>' + data[num].remark + '</pre></td>' +
+                                        '</tr>';
+                                    $("#tcdata").append(_html);
+                                }
+                            }
+                        })
+                    }
+                }
+                else {
+                    alert(rsp.errormsg);
+                }
+            }
+        )
+    })
+
+
     $("#prev").on("click",function (e) {
-        var ifname = $("input.ifname").val();
-        var url = $("input.url").val();
-        var sysid = $("select.sysid").val();
         var page =$(this).attr("page");
-        var remark = $("input.remark").val();
-        var url = "?page="+page+"&ifname="+ifname+"&url="+url+"&sysid="+sysid+"&remark="+remark;
-        window.location.href=url;
+        page_reflash(page);
     })
     $("#next").on("click",function (e) {
+        var page =$(this).attr("page");
+        page_reflash(page);
+    })
+    $("#btn_s").on("click",function (e) {
+        page_reflash(1,1);
+    })
+    function page_reflash(page,page_tc) {
         var ifname = $("input.ifname").val();
         var url = $("input.url").val();
         var sysid = $("select.sysid").val();
-        var page =$(this).attr("page");
         var remark = $("input.remark").val();
+        // var ifid = $("div.table table.table tbody tr[selected='selected']").attr("trid");
         var url = "?page="+page+"&ifname="+ifname+"&url="+url+"&sysid="+sysid+"&remark="+remark;
         window.location.href=url;
-    })
+    }
     $("#btn_c").on("click",function (e) {
         $("div.filter input[type='text']").val('');
         $("div.filter select").val(0);
+        $("div.table table.table tbody tr").each(function (e) {
+            $(this).attr("selected",false);
+        })
     })
-    $("#btn_s").on("click",function (e) {
-        var ifname = $("input.ifname").val();
-        var url = $("input.url").val();
-        var sysid = $("select.sysid").val();
-        var remark = $("input.remark").val();
-        var url = "?ifname="+ifname+"&url="+url+"&sysid="+sysid+"&remark="+remark;
-        window.location.href=url;
-    })
+
+
 
     $("#modal_p input[value='确定']").on('click', function () {
         var data = {
@@ -138,56 +189,9 @@ $(document).ready(function() {
         )
      })
 
-    $("div.postman table.controler input.params").on("click",function () {
-        $("div.postman div.request table.params").toggle();         //参数表格隐藏/显示
-    })
-    $("div.postman div.request table").on("blur", "input[type='text']",function (e) {        //用于参数表自动生成空行
-        var trid=$(this).attr("trid");
-        var ntrid=parseInt(trid)+1;
-        var tableclass=$(this).attr("tclass");
-        if($(this).val() !=""){
-            if ($("div.postman div.request table."+tableclass+" tr[trid="+trid+"]").next().length == 0){     //判断下一个兄弟元素是否不存在
-                content ="<tr trid="+ntrid+">" +
-                    "<td><input type=\"text\" class='key' tclass="+tableclass+ " trid="+ntrid+"></td>" +
-                    "<td><input type=\"text\" class='value' tclass="+tableclass+ " trid="+ntrid+"></td>" +
-                    "<td><input type=\"button\" value=\"X\" class='delbtn' tclass="+tableclass+ " trid="+ntrid+"></td>" +
-                    "</tr>"
-                $("div.postman div.request table."+tableclass+" tbody").append(content);
-            }
-        }
-    })
-    $("div.postman div.request table").on("click", "input[type='button']",function () {         //表格行删除
-        var trid=$(this).attr("trid");
-        var tableclass=$(this).attr("tclass");
-        if ($("div.postman div.request table[class="+tableclass+"] tr[trid="+trid+"]").next().length != 0){
-            $("div.postman div.request table[class="+tableclass+"] tr[trid="+trid+"]").remove();
-        }
-    })
-    $("div.postman div.label").on("click",function () {
-        var config=$(this).text().toLowerCase();
-        var labeltype=$(this).attr("labeltype");
-        $("div.postman div."+labeltype).children().each(function () {
-            if ($(this).attr("class").toLowerCase() == config) {
-                $(this).show();
-            }
-            else {
-                $(this).hide();
-            }
-        })
-    })
-    $("#req_body_type").on("change",function (e) {
-        if($(this).val()=="application/x-www-form-urlencoded"){
-            $("div.postman div.request div.config div.body textarea.body").hide();
-            $("div.postman div.request div.config div.body table.body").show();
-        }
-        else{
-            $("div.postman div.request div.config div.body textarea.body").show();
-            $("div.postman div.request div.config div.body table.body").hide();
-        }
-    })
 
-    //将接口信息与postman信息交互用户友好化
-    $("table.table tbody tr").on("click","input[type='checkbox']",function () {
+    //将接口信息与postman信息交互用户友好化_改成动态获取测试用例
+    $("table.table tbody tr input[type='checkbox']").on("click",function () {
         var trid=$(this).val();
         var host=$("table.table tr[trid="+trid+"] td[tdname='sysname']").text().split(":");
         host.shift();
@@ -238,127 +242,10 @@ $(document).ready(function() {
             }
         )
         }
-    })
-    $("#btn_p").on("click",function (e) {
-        var url=$("#pm_url").val();
-        //js正则不怎么会用，不支持（?<pattern）
-        if (url.indexOf("://") != -1){
-            url=url.split('://');
-            var host=url[1].split('/');
-            host.shift();
-            host="/"+host.join('/');
-        }
-        else {
-            var host=url;
-        }
-        $("#p_url").val(host);
+
+        event.stopPropagation();
     })
 
-    //postman功能
-    $.ajaxSetup({crossDomain: true, xhrFields: {withCredentials: true}});  //支持跨域
-    $("div.postman div.request table.controler input.send").on("click",function (e) {
-        var pmmethod=$("#pm_metod").val();
-        var pmurl=$("#pm_url").val();
-        var pmheader=getdata('header');
-        $("#rsp_header").html('');
-        $('#rsp_rsp').text("sending...");
-        if (pmmethod=='get'){
-            var pmdata=getdata('params');
-            $.ajax({
-                url:pmurl,
-                headers:pmheader,
-                type:'get',
-                data:pmdata,
-                success:function(data,status,xhr){
-                    rsp_update(data,xhr)
-                },
-                error:function(xhr, status, error){
-                    rsp_update(error,xhr)
-                }
-            })}
-        if (pmmethod=='post'){
-            if ($("#req_body_type").val()=="application/x-www-form-urlencoded"){
-                var pmdata=getdata("body");
-            }
-            else{
-                var pmdata=$("#req_body").val();
-            }
-
-            pmheader['Content-Type']=$("#req_body_type").val();
-            //将参数放到url上
-            var urlpar=getdata('params');
-            var urlpars=''
-            for (var up in urlpar){
-                urlpars += up + "=" + encodeURIComponent(urlpar[up]) + "&"
-            }
-            pmurl += "?" + urlpars.substring(0,urlpars.length-1);
-
-            $.ajax({
-                url:pmurl,
-                headers:pmheader,
-                type:'post',
-                data:pmdata,
-                success:function(data,status,xhr){
-                    var eeesss=xhr.getAllResponseHeaders();
-                    rsp_update(data,xhr)
-                },
-                error:function(xhr, status, error){
-                    rsp_update(error,xhr)
-                }
-            })
-        }
-    })
-    function getdata(table){    //获取table数据
-        var data={};
-        $("table." + table + " tbody").children("tr").each(function () {
-            var key=$(this).find(".key").val();
-            var value=$(this).find(".value").val();
-            if (key !=''){
-                data[key]=value;
-            }
-        })
-        return data;
-    }
-    function update(table,dit){     //更新table数据
-        $("table." + table + " tbody").html('');
-        var id=1;
-        for (i in dit){
-            content ="<tr trid="+id+">" +
-                "<td><input type=\"text\" class='key' tclass="+table+ " trid="+id+" value="+i+"></td>" +
-                "<td><input type=\"text\" class='value' tclass="+table+ " trid="+id+" value="+dit[i]+"></td>" +
-                "<td><input type=\"button\" value=\"X\" class='delbtn' tclass="+table+ " trid="+id+"></td>" +
-                "</tr>"
-            $("table." + table + " tbody").append(content);
-            id++
-        }
-        content ="<tr trid="+id+">" +
-            "<td><input type=\"text\" class='key' tclass="+table+ " trid="+id+"></td>" +
-            "<td><input type=\"text\" class='value' tclass="+table+ " trid="+id+"></td>" +
-            "<td><input type=\"button\" value=\"X\" class='delbtn' tclass="+table+ " trid="+id+"></td>" +
-            "</tr>"
-        $("table." + table + " tbody").append(content);
-
-    }
-    function rsp_update(data, xhr) {
-        if (xhr.status != 0 && xhr.status!=404){
-            if (xhr.getResponseHeader('content-type').indexOf('application/json')>=0){  //判断是否json格式
-                var options = {
-                  collapsed: false,
-                  withQuotes: false
-                };
-                $('#rsp_rsp').jsonViewer(data, options);
-            }
-            else {
-                $('#rsp_rsp').text(data.toString());
-            }
-            var pmheader="<pre>"+xhr.getAllResponseHeaders()+"</pre>";
-            $("#rsp_header").html(pmheader);
-        }
-        else{
-            $('#rsp_rsp').text("404 Not Found");
-        }
-
-    }
 
     $("#add_case").on("click",function (e) {
         var chk_value =new Array();

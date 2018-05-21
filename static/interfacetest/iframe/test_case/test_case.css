@@ -35,6 +35,8 @@ input[type="text"]{
 
 
 div.postman{
+    margin:25px 0 0 0;
+    border-top: double #c3c3c3;
     border-bottom: double #c3c3c3;
     overflow:hidden;
 }
