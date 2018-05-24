@@ -146,7 +146,7 @@ def testcase(request):
         hostid =userhost.values_list('sys',flat=True)
         return render(request,'interfacetest/iframe/test_case.html',{'contacts': contacts,'testsys':testsys,'filter':filter,'userhost':userhost,'hostid':hostid},)
     except Exception as e:
-            return JsonResponse(ResultSet(0, str(e)).todict())
+        return JsonResponse(ResultSet(0, str(e)).todict())
 
 def getdata(request):
     try:
@@ -251,7 +251,7 @@ def postdata(request):
                 models.ifmanage.objects.filter(id=id[0]).update(**data)
                 return JsonResponse(ResultSet(1).todict())
             elif act[0] == 'delete':
-                if not id: return JsonResponse(ResultSet(0, '添加数据id参数必填').todict())
+                if not id: return JsonResponse(ResultSet(0, '删除数据id参数必填').todict())
                 if id[0] == '': return JsonResponse(ResultSet(0, 'id参数不能为空字符串').todict())
                 ids = id[0].split(',')
                 models.ifmanage.objects.filter(id__in=ids).delete()
@@ -277,6 +277,7 @@ def postdata(request):
                         models.user_host.objects.create(**data)
                 return JsonResponse(ResultSet(1).todict())
         if type[0] == 'testcase':
+            id = par.getlist('id')
             if act[0] == 'add':
                 interfaceid= par.getlist('interfaceid')
                 if not interfaceid : return JsonResponse(ResultSet(0, 'interfaceid参数有误1').todict())
@@ -297,6 +298,12 @@ def postdata(request):
                     case.update(**data)
                 else:
                     models.test_case.objects.create(**data)
+                return JsonResponse(ResultSet(1).todict())
+            if act[0] == 'delete':
+                if not id: return JsonResponse(ResultSet(0, '删除数据id参数必填').todict())
+                if id[0] == '': return JsonResponse(ResultSet(0, 'id参数不能为空字符串').todict())
+                ids = id[0].split(',')
+                models.test_case.objects.filter(id__in=ids).delete()
                 return JsonResponse(ResultSet(1).todict())
         else:
             return JsonResponse(ResultSet(0, 'type参数有误').todict())

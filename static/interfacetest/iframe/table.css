@@ -96,7 +96,7 @@ div.reveal-modal div.modal{
     text-align:center;
     margin:20px 0 0 0;
 }
-div.reveal-modal input[type="button"]{
+div.reveal-modal div.modal input[type="button"]{
     /*float:;*/
     background-color: #2fa2db;
     color: #f7f7f7;

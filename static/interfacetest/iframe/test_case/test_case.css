@@ -34,56 +34,58 @@ input[type="text"]{
 
 
 
-div.postman{
-    margin:25px 0 0 0;
-    border-top: double #c3c3c3;
-    border-bottom: double #c3c3c3;
-    overflow:hidden;
-}
-div.postman,div.postman div{
-    padding:10px 5px 10px 5px;
-    background-color: #D4FAFF;
-    box-sizing:border-box;
-    overflow:auto;
-}
-div.postman div.request,div.postman div.responses{
+/*div.reveal-modal{*/
+    /*margin:25px 0 0 0;*/
+    /*border-top: double #c3c3c3;*/
+    /*border-bottom: double #c3c3c3;*/
+    /*overflow:hidden;*/
+/*}*/
+/*div.reveal-modal,div.postman div{*/
+    /*padding:10px 5px 10px 5px;*/
+    /*background-color: #D4FAFF;*/
+    /*box-sizing:border-box;*/
+    /*overflow:auto;*/
+/*}*/
+div.reveal-modal div.request,div.postman div.responses{
     float:left;
     display: inline-block;
     width: 50%;
     height: auto;
 }
-div.postman div.request{
+div.reveal-modal div.request{
     border-right:solid #808080;
 }
-div.postman div.request div{
+div.reveal-modal div.request div{
     border-bottom: solid #c3c3c3 1px;
 }
-div.postman table.controler{
+div.reveal-modal table.controler{
     width: 100%;
 }
-div.postman input[type="button"],div.postman select{
+div.reveal-modal input[type="button"],div.postman select{
     height:26px;
 }
-div.postman table.controler #pm_url{
+div.reveal-modal table.controler #pm_url{
     width: 100%;
 }
-div.postman table input{
+div.reveal-modal table input{
     width: 100%;
 }
-div.postman textarea{
+div.reveal-modal textarea{
     width:100%;
     resize:none;
 }
-div.postman div.request div.label,div.postman div.responses div.label{
+div.reveal-modal div.label{
     display: inline-block;
     border-bottom: none;
     cursor:default;
+    padding-right: 20px ;
+
 }
-div.postman div.responses div.rsp div{
+div.reveal-modal div.responses div.rsp div{
     max-height: 700px;
 }
-
-#add_case{
-    float: right;
-    height:30px;
+div.reveal-modal div.ts_settings{
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 10px;
 }

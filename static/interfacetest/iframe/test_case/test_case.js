@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    //用paging插件
+    //用paging插件实现分页——一次性获取所有数据
     $("div.table table.table tbody tr").on("click",function (e) {
         $("div.table table.table tbody tr").each(function (e) {
             $(this).attr("selected",false);
@@ -29,7 +29,7 @@ $(document).ready(function() {
                                         '<td tdname="method">' + data[num].method + '</td>' +
                                         '<td tdname="param">' + data[num].param + '</td>' +
                                         '<td tdname="header">' + data[num].header + '</td>' +
-                                        '<td tdname="body">' + data[num].body + '</td>' +
+                                        '<td tdname="body">' + JSON.parse(data[num].body).type +":<br>"+ JSON.parse(data[num].body).data + '</td>' +
                                         '<td tdname="cookie">' + data[num].cookie + '</td>' +
                                         '<td tdname="expect">' + data[num].expect + '</td>' +
                                         '<td tdname="isdefault">' + data[num].isdefault + '</td>' +
@@ -48,8 +48,7 @@ $(document).ready(function() {
             }
         )
     })
-
-
+    //通过django Paginator实现的分页——动态获取，但是会刷新页面
     $("#prev").on("click",function (e) {
         var page =$(this).attr("page");
         page_reflash(page);
@@ -59,9 +58,9 @@ $(document).ready(function() {
         page_reflash(page);
     })
     $("#btn_s").on("click",function (e) {
-        page_reflash(1,1);
+        page_reflash(1);
     })
-    function page_reflash(page,page_tc) {
+    function page_reflash(page) {
         var ifname = $("input.ifname").val();
         var url = $("input.url").val();
         var sysid = $("select.sysid").val();
@@ -70,6 +69,7 @@ $(document).ready(function() {
         var url = "?page="+page+"&ifname="+ifname+"&url="+url+"&sysid="+sysid+"&remark="+remark;
         window.location.href=url;
     }
+
     $("#btn_c").on("click",function (e) {
         $("div.filter input[type='text']").val('');
         $("div.filter select").val(0);
@@ -149,7 +149,7 @@ $(document).ready(function() {
      })
     $("#btn_d").on('click', function (e) {
         var chk_value =new Array();
-        $("table.table input[type='checkbox']:checked").each(
+        $("table.testcase input[type='checkbox']:checked").each(
             function(){
                 chk_value.push($(this).val());
             }
@@ -165,12 +165,12 @@ $(document).ready(function() {
     })
     $("#modal_d input[value='确定']").on('click', function (){
          var chk_value =new Array();
-         $("table.table input[type='checkbox']:checked").each(
+         $("table.testcase input[type='checkbox']:checked").each(
             function(){
                 chk_value.push($(this).val());
             })
         var data = {
-            type:"ifmanage",
+            type:"testcase",
             act:"delete",
             id:chk_value.join(',')
         };
@@ -179,7 +179,8 @@ $(document).ready(function() {
             data,
             function(respon){
                 if (respon.issuccess == 1){
-                    window.location.reload();
+                    $("#modal_d").trigger("reveal:close");
+                    recase();
                 }
                 else{
                     alert(respon.errormsg);
@@ -187,62 +188,54 @@ $(document).ready(function() {
             }
         )
      })
+    function recase(){
+        $("div.table tbody tr[selected='selected']").click();
+    }
 
-
-    //将接口信息与postman信息交互用户友好化_改成动态获取测试用例
-    $("table.table tbody tr input[type='checkbox']").on("click",function () {
-        var trid=$(this).val();
-        var host=$("table.table tr[trid="+trid+"] td[tdname='sysname']").text().split(":");
-        host.shift();
-        host=host.join(':');
-        var path=$("table.table tr[trid="+trid+"] td[tdname='url']").text();
-        if (path.substr(0,1)!='/' ){path ='/'+path;}
-        if ($(this).is(':checked')){
-            $("#pm_url").val(host+path);
-            $.get(
-                "../api/getdata",
-                {"type":"testcase","ids":trid,},
-                function (rsp) {
-                    if (rsp.issuccess != 0){
-                        var data=rsp[0].data;
-                        if(data.length != 0)
-                        {
-                            for (i in data){
-                              if (data[i].isdefault == 1){
-                                    var method=data[i].method.toLowerCase();
-                                    var param=$.parseJSON(data[i].param);
-                                    var header=$.parseJSON(data[i].header);
-                                    var body=$.parseJSON(data[i].body);
-                                }
-                            }
-                            $("#pm_metod").val(method);
-                            update("params",param);
-                            update("header",header);
-                            $("#req_body_type").val(body.type)
-                            $("#req_body_type").trigger("change");
-                            if (body.type == 'application/x-www-form-urlencoded'){
-                                update("body",$.parseJSON(body.data));
-                            }
-                            else {
-                                $("#req_body").val(body.data);
-                            }
-                        }
-                        // else{                //想一下还是不要置空了
-                        //     $("#pm_metod").val('post');
-                        //     update("params",{});
-                        //     update("header",{});
-                        //     update("body",{});
-                        //     $("#req_body").val('');
-                        // }
-                    }
-                    else{
-                        alert(rsp.errormsg);
-                    }
+    //弹窗中的交互
+    $("div.reveal-modal div.label").on("click",function () {
+        var config=$(this).text().toLowerCase();
+        var labeltype=$(this).attr("labeltype");
+        $("div.reveal-modal div."+labeltype).children().each(function () {
+            if ($(this).attr("class").toLowerCase() == config) {
+                $(this).show();
             }
-        )
+            else {
+                $(this).hide();
+            }
+        })
+    })
+    $("div.reveal-modal div.ts_settings table").on("blur", "input[type='text']",function (e) {        //用于参数表自动生成空行
+        var trid=$(this).attr("trid");
+        var ntrid=parseInt(trid)+1;
+        var tableclass=$(this).attr("tclass");
+        if($(this).val() !=""){
+            if ($("div.reveal-modal div.ts_settings table."+tableclass+" tr[trid="+trid+"]").next().length == 0){     //判断下一个兄弟元素是否不存在
+                content ="<tr trid="+ntrid+">" +
+                    "<td><input type=\"text\" class='key' tclass="+tableclass+ " trid="+ntrid+"></td>" +
+                    "<td><input type=\"text\" class='value' tclass="+tableclass+ " trid="+ntrid+"></td>" +
+                    "<td><input type=\"button\" value=\"X\" class='delbtn' tclass="+tableclass+ " trid="+ntrid+"></td>" +
+                    "</tr>"
+                $("div.reveal-modal div.ts_settings table."+tableclass+" tbody").append(content);
+            }
         }
-
-        event.stopPropagation();
+    })
+    $("div.reveal-modal div.ts_settings table").on("click", "input[type='button']",function () {         //表格行删除
+        var trid=$(this).attr("trid");
+        var tableclass=$(this).attr("tclass");
+        if ($("div.reveal-modal div.ts_settings table[class="+tableclass+"] tr[trid="+trid+"]").next().length != 0){
+            $("div.reveal-modal div.ts_settings table[class="+tableclass+"] tr[trid="+trid+"]").remove();
+        }
+    })
+    $("#p_body_type").on("change",function (e) {
+        if($(this).val()=="application/x-www-form-urlencoded"){
+            $("div.reveal-modal div.ts_settings div.config div.body textarea.body").hide();
+            $("div.reveal-modal div.ts_settings div.config div.body table.body").show();
+        }
+        else{
+            $("div.reveal-modal div.ts_settings div.config div.body textarea.body").show();
+            $("div.reveal-modal div.ts_settings div.config div.body table.body").hide();
+        }
     })
 
 

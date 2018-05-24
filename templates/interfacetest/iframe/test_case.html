@@ -102,19 +102,19 @@
                 </tr>
             </thead>
             <tbody id="tcdata">
-                <tr trid="0">
-                    <td><input type="checkbox" value=0></td>
-                    <td tdname="id">2</td>
-                    <td tdname="method">3</td>
-                    <td tdname="param">4</td>
-                    <td tdname="header">5</td>
-                    <td tdname="body">6</td>
-                    <td tdname="cookie">7</td>
-                    <td tdname="expect">8</td>
-                    <td tdname="isdefault">9</td>
-                    <td tdname="isactive">10</td>
-                    <td tdname="remark"><pre>11</pre></td>
-                </tr>
+{#                <tr trid="0">#}
+{#                    <td><input type="checkbox" value=0></td>#}
+{#                    <td tdname="id">2</td>#}
+{#                    <td tdname="method">3</td>#}
+{#                    <td tdname="param">4</td>#}
+{#                    <td tdname="header">5</td>#}
+{#                    <td tdname="body">6</td>#}
+{#                    <td tdname="cookie">7</td>#}
+{#                    <td tdname="expect">8</td>#}
+{#                    <td tdname="isdefault">9</td>#}
+{#                    <td tdname="isactive">10</td>#}
+{#                    <td tdname="remark"><pre>11</pre></td>#}
+{#                </tr>#}
             </tbody>
         </table>
     </div>
@@ -132,45 +132,194 @@
     <div id="modal_p" class="reveal-modal" >
         <h1 class="modal">添加</h1>
         <table class="modal">
-            <tr><td width="100">接口名：</td>
-                <td ><input type="text" id="p_ifname"></td></tr>
-            <tr><td >测试系统：</td>
-                <td ><select name="" id="p_sysid">
-                    {% for sys in testsys %}
-                        <option value={{ sys.id }}>{{ sys.sysname }}</option>
-                    {% endfor %}
-                </select></td></tr>
-            <tr><td width="100">接口地址：</td>
-                <td ><input type="text" id="p_url"></td></tr>
-            <tr><td >备注：</td>
-                <td ><textarea id="p_remark"></textarea></td></tr>
+            <tr><td width="100">方法：</td>
+                <td ><select name="metod" id="p_metod">
+                        <option value="post">POST</option>
+                        <option value="get">GET</option></select></td></tr>
+            <tr><td width="100">默认用例：</td>
+                <td ><select name="isdefault" id="p_isdeflult">
+                        <option value="0">否</option>
+                        <option value="1">是</option></select></td></tr>
+            <tr><td width="100">激活：</td>
+                <td ><select name="isdefault" id="p_isactive">
+                        <option value="1">是</option>
+                        <option value="0">否</option></select></td></tr>
         </table>
+        <div class="ts_settings">
+            <div class="label" labeltype="config">Params</div>
+            <div class="label" labeltype="config">Header</div>
+            <div class="label" labeltype="config">Body</div>
+            <div class="label" labeltype="config">Expect</div>
+            <div class="label" labeltype="config">Remark</div>
+            <hr>
+            <div class="config">
+                <table class="params" style="display: table;">
+                    <thead><tr>
+                        <th>key</th>
+                        <th>value</th>
+                        <th width="30"></th>
+                    </tr></thead>
+                    <tbody>
+                        <tr trid="1">
+                        <td><input type="text" class="key" tclass="params" trid="1"></td>
+                        <td><input type="text" class="value" tclass="params" trid="1"></td>
+                        <td><input type="button" value="X" class="delbtn" tclass="params" trid=1></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="header" hidden>
+                    <thead><tr>
+                        <th>header</th>
+                        <th>value</th>
+                        <th width="30"></th>
+                    </tr></thead>
+                    <tbody>
+                    <tr trid="1">
+                        <td><input type="text" class="key" tclass="header" trid="1"></td>
+                        <td><input type="text" class="value" tclass="header" trid="1"></td>
+                        <td><input type="button" value="X" class="delbtn" tclass="header" trid=1></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="body" hidden>
+                    <select class="body" id="p_body_type">
+                        <option value="application/json selected="selected">application/json</option>
+                        <option value="text/plain">text/plain</option>
+                        <option value="application/x-www-form-urlencoded"">application/x-www-form-urlencoded</option>
+                    </select>
+                    <textarea class="body" id="p_body" cols="30" rows="10"></textarea>
+                    <table class="body" hidden>
+                        <thead><tr>
+                        <th>key</th>
+                        <th>value</th>
+                        <th width="30"></th>
+                        </tr></thead>
+                    <tbody>
+                    <tr trid="1">
+                        <td><input type="text" class="key" tclass="body" trid="1"></td>
+                        <td><input type="text" class="value" tclass="body" trid="1"></td>
+                        <td><input type="button" value="X" class="delbtn" tclass="body" trid=1></td>
+                    </tr>
+                    </tbody>
+                    </table>
+                </div>
+                <table class="expect" hidden>
+                    <thead><tr>
+                        <th>type</th>
+                        <th>rule</th>
+                        <th width="30"></th>
+                    </tr></thead>
+                    <tbody>
+                        <tr trid="1">
+                        <td><input type="text" class="key" tclass="params" trid="1"></td>
+                        <td><input type="text" class="value" tclass="params" trid="1"></td>
+                        <td><input type="button" value="X" class="delbtn" tclass="params" trid=1></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <textarea class="remark" id="p_remark" cols="30" rows="10" hidden></textarea>
+            </div>
+        </div>
         <div class="modal">
-        <input type="button" value="确定" >
-        <input type="button" value="取消" class="close-reveal-modal">
+            <input type="button" value="确定" >
+            <input type="button" value="取消" class="close-reveal-modal">
         </div>
         <a class="close-reveal-modal">&#215;</a>
     </div>
     <div id="modal_a" class="reveal-modal" >
         <h1 class="modal">修改</h1>
-
         <table class="modal">
-            <tr><td width="100">接口名：</td>
-                <td ><input type="text" id="a_ifname"></td></tr>
-            <tr><td >测试系统：</td>
-                <td ><select name="" id="a_sysid" value="0">
-                    {% for sys in testsys %}
-                        <option value={{ sys.id }}>{{ sys.sysname }}</option>
-                    {% endfor %}
-                </select></td></tr>
-            <tr><td width="100">url：</td>
-                <td ><input type="text" id="a_url"></td></tr>
-            <tr><td >备注：</td>
-                <td ><textarea id="a_remark"></textarea></td></tr>
+            <tr><td width="100">方法：</td>
+                <td ><select name="metod" id="a_metod">
+                        <option value="post">POST</option>
+                        <option value="get">GET</option></select></td></tr>
+            <tr><td width="100">默认用例：</td>
+                <td ><select name="isdefault" id="a_isdeflult">
+                        <option value="0">否</option>
+                        <option value="1">是</option></select></td></tr>
+            <tr><td width="100">激活：</td>
+                <td ><select name="isdefault" id="a_isactive">
+                        <option value="1">是</option>
+                        <option value="0">否</option></select></td></tr>
         </table>
+        <div class="ts_settings">
+            <div class="label" labeltype="config">Params</div>
+            <div class="label" labeltype="config">Header</div>
+            <div class="label" labeltype="config">Body</div>
+            <div class="label" labeltype="config">Expect</div>
+            <div class="label" labeltype="config">Remark</div>
+            <hr>
+            <div class="config">
+                <table class="params" style="display: table;">
+                    <thead><tr>
+                        <th>key</th>
+                        <th>value</th>
+                        <th width="30"></th>
+                    </tr></thead>
+                    <tbody>
+                        <tr trid="1">
+                        <td><input type="text" class="key" tclass="params" trid="1"></td>
+                        <td><input type="text" class="value" tclass="params" trid="1"></td>
+                        <td><input type="button" value="X" class="delbtn" tclass="params" trid=1></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="header" hidden>
+                    <thead><tr>
+                        <th>header</th>
+                        <th>value</th>
+                        <th width="30"></th>
+                    </tr></thead>
+                    <tbody>
+                    <tr trid="1">
+                        <td><input type="text" class="key" tclass="header" trid="1"></td>
+                        <td><input type="text" class="value" tclass="header" trid="1"></td>
+                        <td><input type="button" value="X" class="delbtn" tclass="header" trid=1></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="body" hidden>
+                    <select class="body" id="a_body_type">
+                        <option value="application/json selected="selected">application/json</option>
+                        <option value="text/plain">text/plain</option>
+                        <option value="application/x-www-form-urlencoded"">application/x-www-form-urlencoded</option>
+                    </select>
+                    <textarea class="body" id="a_body" cols="30" rows="10"></textarea>
+                    <table class="body" hidden>
+                        <thead><tr>
+                        <th>key</th>
+                        <th>value</th>
+                        <th width="30"></th>
+                        </tr></thead>
+                    <tbody>
+                    <tr trid="1">
+                        <td><input type="text" class="key" tclass="body" trid="1"></td>
+                        <td><input type="text" class="value" tclass="body" trid="1"></td>
+                        <td><input type="button" value="X" class="delbtn" tclass="body" trid=1></td>
+                    </tr>
+                    </tbody>
+                    </table>
+                </div>
+                <table class="expect" hidden>
+                    <thead><tr>
+                        <th>type</th>
+                        <th>rule</th>
+                        <th width="30"></th>
+                    </tr></thead>
+                    <tbody>
+                        <tr trid="1">
+                        <td><input type="text" class="key" tclass="params" trid="1"></td>
+                        <td><input type="text" class="value" tclass="params" trid="1"></td>
+                        <td><input type="button" value="X" class="delbtn" tclass="params" trid=1></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <textarea class="remark" id="a_remark" cols="30" rows="10" hidden></textarea>
+            </div>
+        </div>
         <div class="modal">
-        <input type="button" value="确定" >
-        <input type="button" value="取消" class="close-reveal-modal">
+            <input type="button" value="确定" >
+            <input type="button" value="取消" class="close-reveal-modal">
         </div>
         <a class="close-reveal-modal">&#215;</a>
     </div>
