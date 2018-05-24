@@ -14,7 +14,6 @@ $(document).ready(function() {
                 if (rsp.issuccess != 0) {
                     var data = rsp[0].data;
                     if (data.length != 0) {
-                        $('#paging').clearpaging();  //初始化paging
                         $('#paging').paging({
                             nowPage: 1,
                             allPages: Math.ceil(data.length / eachpagecount),

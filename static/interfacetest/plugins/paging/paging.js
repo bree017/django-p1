@@ -160,6 +160,7 @@ $(function () {
 
     inital: function () {   //初始化
       var self = this;
+      this.destory();     //删掉前一个对象
 
       this.initalPaging();
       this.opts.callBack && this.opts.callBack(this.iNum);
@@ -220,6 +221,16 @@ $(function () {
       });
     },
 
+      destory: function(){    //用于释放前一次初始化生成的paging对象
+        // var self=this;
+        this.$aItem.unbind();
+        this.$oFirst.unbind();
+        this.$oLast.unbind();
+        this.$oPrev.unbind();
+        this.$oNext.unbind();
+        this.$oGo_btn.unbind();
+      },
+
     constructor: Paging
   };
 
@@ -227,8 +238,5 @@ $(function () {
     var paging = new Paging(this, options);
     return paging.inital();
   };
-  $.fn.clearpaging = function () {
-    paging = undefined;
-  }
 
 })(jQuery, window, document, undefined);
