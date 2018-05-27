@@ -89,3 +89,6 @@ div.reveal-modal div.ts_settings{
     border-radius: 10px;
     padding: 10px;
 }
+div.ts_settings{
+    min-height: 240px;
+}

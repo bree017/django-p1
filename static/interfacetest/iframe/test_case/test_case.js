@@ -79,22 +79,54 @@ $(document).ready(function() {
     })
 
 
-
+    $("#btn_p").on('click', function (e) {
+        var chk_value =new Array();
+        $("table.table tbody tr[selected='selected']").each(
+            function(){
+                chk_value.push($(this).attr('trid'));
+            }
+        )
+        if (chk_value.length != 1){
+            alert('请选择接口');
+        }
+        else{
+            e.preventDefault();
+            var modalLocation = $(this).attr('to-data-reveal-id');
+            $('#' + modalLocation).reveal($(this).data());
+        }
+    })
     $("#modal_p input[value='确定']").on('click', function () {
+        if($('#p_body_type').val()=='application/x-www-form-urlencoded'){
+            var bodydata=JSON.stringify(getdata('body'));
+        }
+        else{
+            var bodydata=$('#p_body').val();
+        }
+        var body={
+            type:$('#p_body_type').val(),
+            data:bodydata
+        }
         var data = {
-            type:"ifmanage",
+            type:"testcase",
             act:"add",
-            ifname:$("#p_ifname").val(),
-            sysid:$("#p_sysid").val(),
-            url:$("#p_url").val(),
-            remark:$("#p_remark").val()
+            interfaceid:$("table.table tbody tr[selected='selected']").attr("trid"),
+            method:$("#p_metod").val(),
+            param:JSON.stringify(getdata('params')),
+            header:JSON.stringify(getdata('header')),
+            body:JSON.stringify(body),
+            cookie:$('#p_cookie').val(),
+            expect:JSON.stringify(getdata('expect')),
+            isdefault:$("#p_isdeflult").val(),
+            isactive:$("#p_isactive").val(),
+            remark:$('#p_remark').val()
         };
         $.post(
             '../api/postdata',
             data,
             function(respon){
                 if (respon.issuccess == 1){
-                    window.location.reload();
+                     $("#modal_p").trigger("reveal:close");
+                    recase();
                 }
                 else{
                     alert(respon.errormsg);
@@ -104,7 +136,7 @@ $(document).ready(function() {
     })
     $("#btn_a").on('click', function (e) {
         var chk_value =new Array();
-        $("table.table input[type='checkbox']:checked").each(
+        $("table.testcase input[type='checkbox']:checked").each(
             function(){
                 chk_value.push($(this).val());
             }
@@ -191,6 +223,17 @@ $(document).ready(function() {
     function recase(){
         $("div.table tbody tr[selected='selected']").click();
     }
+    function getdata(table){    //获取table数据
+        var data={};
+        $("table." + table + " tbody").children("tr").each(function () {
+            var key=$(this).find(".key").val();
+            var value=$(this).find(".value").val();
+            if (key !=''){
+                data[key]=value;
+            }
+        })
+        return data;
+    }
 
     //弹窗中的交互
     $("div.reveal-modal div.label").on("click",function () {
@@ -239,49 +282,4 @@ $(document).ready(function() {
     })
 
 
-    $("#add_case").on("click",function (e) {
-        var chk_value =new Array();
-        $("table.table input[type='checkbox']:checked").each(
-            function(){
-                chk_value.push($(this).val());
-            }
-        )
-        if (chk_value.length != 1){
-            alert('请选择一条数据');
-            return;
-        }
-        if($('#req_body_type').val()=='application/x-www-form-urlencoded'){
-            var bodydata=JSON.stringify(getdata('body'));
-        }
-        else{
-            var bodydata=$('#req_body').val();
-        }
-        var body={
-            type:$('#req_body_type').val(),
-            data:bodydata
-        }
-        data ={
-            'type':'testcase',
-            'act':'add',
-            'interfaceid':chk_value[0],
-            'method':$("#pm_metod").val(),
-            'param':JSON.stringify(getdata('params')),
-            'header':JSON.stringify(getdata('header')),
-            'body':JSON.stringify(body),
-            'isdefault':1,
-            'isactive':1
-        }
-        $.post(
-            '../api/postdata',
-            data,
-            function(respon){
-                if (respon.issuccess == 1){
-                    alert('添加成功');
-                }
-                else{
-                    alert(respon.errormsg);
-                }
-            }
-        )
-    })
 })

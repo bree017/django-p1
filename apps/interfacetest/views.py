@@ -291,10 +291,12 @@ def postdata(request):
                     'cookie':(par.getlist('cookie')) and par.getlist('cookie')[0] or '',
                     'expect':(par.getlist('expect')) and par.getlist('expect')[0] or '',
                     'isdefault':(par.getlist('isdefault')) and par.getlist('isdefault')[0] or 0,
-                    'isactive':(par.getlist('isactive')) and par.getlist('isactive')[0] or 1
+                    'isactive':(par.getlist('isactive')) and par.getlist('isactive')[0] or 1,
+                    'remark':(par.getlist('remark')) and par.getlist('remark')[0] or 1,
                 }
                 case = models.test_case.objects.filter(interface=interfaceid[0],isdefault=1)
-                if case.count() > 0 and par.getlist('isdefault')[0]:
+                if case.count() > 0 and int(par.getlist('isdefault')[0]):
+                    data['last_update_date']=datetime.datetime.now()
                     case.update(**data)
                 else:
                     models.test_case.objects.create(**data)

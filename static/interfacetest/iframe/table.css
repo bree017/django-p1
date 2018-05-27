@@ -74,6 +74,9 @@ table.filter select{
     width: 150px;
     height: 26px;
 }
+table.table tbody,table.testcase tbody {
+    font-size: 12px;
+}
 
 /*弹窗*/
 table.modal{

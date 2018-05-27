@@ -19,7 +19,7 @@
     <div class="top">用例管理
     <input class="topinput" type="button" value="删除" id="btn_d" to-data-reveal-id="modal_d" data-animation="none">
     <input class="topinput" type="button" value="修改" id="btn_a" to-data-reveal-id="modal_a" data-animation="none">
-    <input class="topinput" type="button" value="添加" id="btn_p" data-reveal-id="modal_p" data-animation="none">
+    <input class="topinput" type="button" value="添加" id="btn_p" to-data-reveal-id="modal_p" data-animation="none">
     <input class="topinput" type="button" value="搜索" id="btn_s">
     <input class="topinput" type="button" value="清空" id="btn_c">
     </div>
@@ -91,10 +91,10 @@
                     <th style="width:30px"><input type="checkbox" value=0></th>
                     <th style="width:50px">ID</th>
                     <th style="width:50px">请求方法</th>
-                    <th style="width:200px">url参数</th>
+                    <th style="width:250px">url参数</th>
                     <th style="width:100px">请求头</th>
-                    <th style="width:200px">body</th>
-                    <th style="width:200px">cookie</th>
+                    <th style="width:250px">body</th>
+                    <th style="width:100px">cookie</th>
                     <th style="width:200px">预期结果</th>
                     <th style="width:50px">是否默认</th>
                     <th style="width:50px">是否激活</th>
@@ -149,6 +149,7 @@
             <div class="label" labeltype="config">Params</div>
             <div class="label" labeltype="config">Header</div>
             <div class="label" labeltype="config">Body</div>
+            <div class="label" labeltype="config">Cookie</div>
             <div class="label" labeltype="config">Expect</div>
             <div class="label" labeltype="config">Remark</div>
             <hr>
@@ -183,9 +184,9 @@
                 </table>
                 <div class="body" hidden>
                     <select class="body" id="p_body_type">
-                        <option value="application/json selected="selected">application/json</option>
+                        <option value="application/json" selected="selected">application/json</option>
                         <option value="text/plain">text/plain</option>
-                        <option value="application/x-www-form-urlencoded"">application/x-www-form-urlencoded</option>
+                        <option value="application/x-www-form-urlencoded">application/x-www-form-urlencoded</option>
                     </select>
                     <textarea class="body" id="p_body" cols="30" rows="10"></textarea>
                     <table class="body" hidden>
@@ -203,6 +204,7 @@
                     </tbody>
                     </table>
                 </div>
+                <textarea class="cookie" id="p_cookie" cols="30" rows="10" hidden></textarea>
                 <table class="expect" hidden>
                     <thead><tr>
                         <th>type</th>
@@ -211,9 +213,9 @@
                     </tr></thead>
                     <tbody>
                         <tr trid="1">
-                        <td><input type="text" class="key" tclass="params" trid="1"></td>
-                        <td><input type="text" class="value" tclass="params" trid="1"></td>
-                        <td><input type="button" value="X" class="delbtn" tclass="params" trid=1></td>
+                        <td><input type="text" class="key" tclass="expect" trid="1"></td>
+                        <td><input type="text" class="value" tclass="expect" trid="1"></td>
+                        <td><input type="button" value="X" class="delbtn" tclass="expect" trid=1></td>
                         </tr>
                     </tbody>
                 </table>
@@ -308,9 +310,9 @@
                     </tr></thead>
                     <tbody>
                         <tr trid="1">
-                        <td><input type="text" class="key" tclass="params" trid="1"></td>
-                        <td><input type="text" class="value" tclass="params" trid="1"></td>
-                        <td><input type="button" value="X" class="delbtn" tclass="params" trid=1></td>
+                        <td><input type="text" class="key" tclass="expect" trid="1"></td>
+                        <td><input type="text" class="value" tclass="expect" trid="1"></td>
+                        <td><input type="button" value="X" class="delbtn" tclass="expect" trid=1></td>
                         </tr>
                     </tbody>
                 </table>
