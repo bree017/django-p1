@@ -301,6 +301,25 @@ def postdata(request):
                 else:
                     models.test_case.objects.create(**data)
                 return JsonResponse(ResultSet(1).todict())
+            if act[0] == 'alter':
+                if not id: return JsonResponse(ResultSet(0, '修改数据id参数必填').todict())
+                if id[0] == '': return JsonResponse(ResultSet(0, 'id参数不能为空字符串').todict())
+                data ={
+                    'id': id[0],
+                    'method':(par.getlist('method'))and (par.getlist('method')[0]) or 1,
+                    'param':(par.getlist('param')) and par.getlist('param')[0] or '',
+                    'header':(par.getlist('header')) and par.getlist('header')[0] or '',
+                    'body':(par.getlist('body')) and par.getlist('body')[0] or '',
+                    'cookie':(par.getlist('cookie')) and par.getlist('cookie')[0] or '',
+                    'expect':(par.getlist('expect')) and par.getlist('expect')[0] or '',
+                    'isdefault':(par.getlist('isdefault')) and par.getlist('isdefault')[0] or 0,
+                    'isactive':(par.getlist('isactive')) and par.getlist('isactive')[0] or 1,
+                    'remark':(par.getlist('remark')) and par.getlist('remark')[0] or 1,
+                    'last_update_date': datetime.datetime.now(),
+                }
+                models.ifmanage.objects.filter(id=id[0]).update(**data)
+                return JsonResponse(ResultSet(1).todict())
+
             if act[0] == 'delete':
                 if not id: return JsonResponse(ResultSet(0, '删除数据id参数必填').todict())
                 if id[0] == '': return JsonResponse(ResultSet(0, 'id参数不能为空字符串').todict())

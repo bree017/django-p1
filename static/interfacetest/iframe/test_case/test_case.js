@@ -223,17 +223,6 @@ $(document).ready(function() {
     function recase(){
         $("div.table tbody tr[selected='selected']").click();
     }
-    function getdata(table){    //获取table数据
-        var data={};
-        $("table." + table + " tbody").children("tr").each(function () {
-            var key=$(this).find(".key").val();
-            var value=$(this).find(".value").val();
-            if (key !=''){
-                data[key]=value;
-            }
-        })
-        return data;
-    }
 
     //弹窗中的交互
     $("div.reveal-modal div.label").on("click",function () {

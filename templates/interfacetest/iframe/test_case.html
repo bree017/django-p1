@@ -248,6 +248,7 @@
             <div class="label" labeltype="config">Params</div>
             <div class="label" labeltype="config">Header</div>
             <div class="label" labeltype="config">Body</div>
+            <div class="label" labeltype="config">Cookie</div>
             <div class="label" labeltype="config">Expect</div>
             <div class="label" labeltype="config">Remark</div>
             <hr>
@@ -282,9 +283,9 @@
                 </table>
                 <div class="body" hidden>
                     <select class="body" id="a_body_type">
-                        <option value="application/json selected="selected">application/json</option>
+                        <option value="application/json" selected="selected">application/json</option>
                         <option value="text/plain">text/plain</option>
-                        <option value="application/x-www-form-urlencoded"">application/x-www-form-urlencoded</option>
+                        <option value="application/x-www-form-urlencoded">application/x-www-form-urlencoded</option>
                     </select>
                     <textarea class="body" id="a_body" cols="30" rows="10"></textarea>
                     <table class="body" hidden>
@@ -302,6 +303,7 @@
                     </tbody>
                     </table>
                 </div>
+                <textarea class="cookie" id="a_cookie" cols="30" rows="10" hidden></textarea>
                 <table class="expect" hidden>
                     <thead><tr>
                         <th>type</th>

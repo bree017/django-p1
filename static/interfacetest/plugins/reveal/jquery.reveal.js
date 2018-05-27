@@ -121,12 +121,9 @@ $(document).ready(function() {
                         this.options[0].selected = true;        //options[0].selected是js方法
                         $(this).trigger("change");
                     });
-                    // $.each($('.reveal-modal select'),function(){
-                    //     this.options[0].selected = true;});
-                    // var SelectArr = $(".reveal-modal select")
-                    // for (var i = 0; i < SelectArr.length; i++) {
-                    // SelectArr[i].options[0].selected = true;
-                    // }
+                    $('.reveal-modal input.delbtn').each(function (e) {     //表格重置
+                        $(this).click();
+                    });
                 }
                 modal.unbind('reveal:close');
             });
