@@ -67,11 +67,11 @@ def ifmanage(request):
         if ifname == None or ifname == '':
             ifname = ''
         else:
-            contact_list = contact_list.filter(ifname__contains=ifname)
+            contact_list = contact_list.filter(ifname__icontains=ifname)
         if url == None or url == '':
             url = ''
         else:
-            contact_list = contact_list.filter(url__contains=url)
+            contact_list = contact_list.filter(url__icontains=url)
         if sysid == None or sysid == '0':
             sysid = 0
         else:
@@ -80,7 +80,7 @@ def ifmanage(request):
         if remark == None or remark == '':
             remark = ''
         else:
-            contact_list = contact_list.filter(remark__contains=remark)
+            contact_list = contact_list.filter(remark__icontains=remark)
 
         filter ={'ifname':ifname,'url':url,'sysid':sysid,'remark':remark}
         testsys=models.sysconfig.objects.values('id','sysname').distinct()
@@ -114,11 +114,11 @@ def testcase(request):
         if ifname == None or ifname == '':
             ifname = ''
         else:
-            contact_list = contact_list.filter(ifname__contains=ifname)
+            contact_list = contact_list.filter(ifname__icontains=ifname)
         if url == None or url == '':
             url = ''
         else:
-            contact_list = contact_list.filter(url__contains=url)
+            contact_list = contact_list.filter(url__icontains=url)
         if sysid == None or sysid == '0':
             sysid = 0
         else:
@@ -127,7 +127,7 @@ def testcase(request):
         if remark == None or remark == '':
             remark = ''
         else:
-            contact_list = contact_list.filter(remark__contains=remark)
+            contact_list = contact_list.filter(remark__icontains=remark)
 
         filter ={'ifname':ifname,'url':url,'sysid':sysid,'remark':remark}
         testsys=models.sysconfig.objects.values('id','sysname').distinct()
