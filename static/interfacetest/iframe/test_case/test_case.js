@@ -110,13 +110,13 @@ $(document).ready(function() {
             type:"testcase",
             act:"add",
             interfaceid:$("table.table tbody tr[selected='selected']").attr("trid"),
-            method:$("#p_metod").val(),
+            method:$("#p_method").val(),
             param:JSON.stringify(getdata('params')),
             header:JSON.stringify(getdata('header')),
             body:JSON.stringify(body),
             cookie:$('#p_cookie').val(),
             expect:JSON.stringify(getdata('expect')),
-            isdefault:$("#p_isdeflult").val(),
+            isdefault:$("#p_isdefault").val(),
             isactive:$("#p_isactive").val(),
             remark:$('#p_remark').val()
         };
@@ -146,10 +146,27 @@ $(document).ready(function() {
         }
         else{
             var trid=chk_value[0];
-            $("#a_ifname").val($("table.table tbody tr[trid='"+trid+"'] td[tdname='ifname']").text());
-            $("#a_sysid").val($("table.table tbody tr[trid='"+trid+"'] td[tdname='sysname']").attr("sysid"));
-            $("#a_url").val($("table.table tbody tr[trid='"+trid+"'] td[tdname='url']").text());
-            $("#a_remark").val($("table.table tbody tr[trid='"+trid+"'] td[tdname='remark']").text());
+            $("#a_method").val($("table.testcase tbody tr[trid='"+trid+"'] td[tdname='method']").text().toLowerCase());
+            $("#a_isdefault").val(($("table.testcase tbody tr[trid='"+trid+"'] td[tdname='isdefault']").text().toLowerCase()=='true')?1:0);
+            $("#a_isactive").val(($("table.testcase tbody tr[trid='"+trid+"'] td[tdname='isactive']").text()=='true')?1:0);
+            $("table.testcase tbody tr[trid='"+trid+"'] td[tdname='param']").text()!=''?(update("params",JSON.parse($("table.testcase tbody tr[trid='"+trid+"'] td[tdname='param']").text()))):false;
+            $("table.testcase tbody tr[trid='"+trid+"'] td[tdname='header']").text()!=''?(update("header",JSON.parse($("table.testcase tbody tr[trid='"+trid+"'] td[tdname='header']").text()))):false;
+            if ($("table.testcase tbody tr[trid='"+trid+"'] td[tdname='body']").text()!=''){
+                var bdtindex=$("table.testcase tbody tr[trid='"+trid+"'] td[tdname='body']").text().indexOf(":");
+                var bodytype=$("table.testcase tbody tr[trid='"+trid+"'] td[tdname='body']").text().substring(0,bdtindex);
+                var bodydata=$("table.testcase tbody tr[trid='"+trid+"'] td[tdname='body']").text().substring(bdtindex+1);
+                $("#a_body_type").val(bodytype);
+                $("#a_body_type").trigger("change");
+                if (bodytype=="application/x-www-form-urlencoded") {
+                    update("body",JSON.parse(bodydata));
+                }
+                else{
+                    $("#a_body").val(bodydata);
+                }
+            }
+            $("#a_cookie").val($("table.testcase tbody tr[trid='"+trid+"'] td[tdname='cookie']").text());
+            $("table.testcase tbody tr[trid='"+trid+"'] td[tdname='expect']").text()!=''?(update("expect",JSON.parse($("table.testcase tbody tr[trid='"+trid+"'] td[tdname='expect']").text()))):false;
+            $("#a_remark").val($("table.testcase tbody tr[trid='"+trid+"'] td[tdname='remark']").text());
             $("#modal_a").attr("trid",trid);
             e.preventDefault();
             var modalLocation = $(this).attr('to-data-reveal-id');
@@ -260,6 +277,16 @@ $(document).ready(function() {
         }
     })
     $("#p_body_type").on("change",function (e) {
+        if($(this).val()=="application/x-www-form-urlencoded"){
+            $("div.reveal-modal div.ts_settings div.config div.body textarea.body").hide();
+            $("div.reveal-modal div.ts_settings div.config div.body table.body").show();
+        }
+        else{
+            $("div.reveal-modal div.ts_settings div.config div.body textarea.body").show();
+            $("div.reveal-modal div.ts_settings div.config div.body table.body").hide();
+        }
+    })
+    $("#a_body_type").on("change",function (e) {
         if($(this).val()=="application/x-www-form-urlencoded"){
             $("div.reveal-modal div.ts_settings div.config div.body textarea.body").hide();
             $("div.reveal-modal div.ts_settings div.config div.body table.body").show();
