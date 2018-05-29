@@ -35,21 +35,22 @@ function getdata(table){    //获取table数据
     return data;
 }
 function update(table,dit){     //更新table数据
+    if (dit==''){return;}
     $("table." + table + " tbody").html('');
     var id=1;
     for (i in dit){
         content ="<tr trid="+id+">" +
-            "<td><input type=\"text\" class='key' tclass="+table+ " trid="+id+" value="+i+"></td>" +
-            "<td><input type=\"text\" class='value' tclass="+table+ " trid="+id+" value="+dit[i]+"></td>" +
-            "<td><input type=\"button\" value=\"X\" class='delbtn' tclass="+table+ " trid="+id+"></td>" +
+            "<td><input type=\"text\" class='key' tclass=\""+table+ "\" trid="+id+" value=\""+i+"\"></td>" +
+            "<td><input type=\"text\" class='value' tclass=\""+table+ "\" trid="+id+" value=\""+dit[i]+"\"></td>" +
+            "<td><input type=\"button\" value=\"X\" class='delbtn' tclass=\""+table+ "\" trid="+id+"></td>" +
             "</tr>"
         $("table." + table + " tbody").append(content);
         id++
     }
     content ="<tr trid="+id+">" +
-        "<td><input type=\"text\" class='key' tclass="+table+ " trid="+id+"></td>" +
-        "<td><input type=\"text\" class='value' tclass="+table+ " trid="+id+"></td>" +
-        "<td><input type=\"button\" value=\"X\" class='delbtn' tclass="+table+ " trid="+id+"></td>" +
+        "<td><input type=\"text\" class='key' tclass=\""+table+ "\" trid="+id+"></td>" +
+        "<td><input type=\"text\" class='value' tclass=\""+table+ "\" trid="+id+"></td>" +
+        "<td><input type=\"button\" value=\"X\" class='delbtn' tclass=\""+table+ "\" trid="+id+"></td>" +
         "</tr>"
     $("table." + table + " tbody").append(content);
 

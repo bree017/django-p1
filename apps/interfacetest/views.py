@@ -314,7 +314,7 @@ def postdata(request):
                     'expect':(par.getlist('expect')) and par.getlist('expect')[0] or '',
                     'isdefault':(par.getlist('isdefault')) and par.getlist('isdefault')[0] or 0,
                     'isactive':(par.getlist('isactive')) and par.getlist('isactive')[0] or 1,
-                    'remark':(par.getlist('remark')) and par.getlist('remark')[0] or 1,
+                    'remark':(par.getlist('remark')) and par.getlist('remark')[0] or '',
                     'last_update_date': datetime.datetime.now(),
                 }
                 models.ifmanage.objects.filter(id=id[0]).update(**data)
