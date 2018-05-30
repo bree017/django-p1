@@ -317,7 +317,10 @@ def postdata(request):
                     'remark':(par.getlist('remark')) and par.getlist('remark')[0] or '',
                     'last_update_date': datetime.datetime.now(),
                 }
-                models.ifmanage.objects.filter(id=id[0]).update(**data)
+                if par.getlist('isdefault') and int(par.getlist('isdefault')[0]):
+                    interface=models.ifmanage.objects.get(id=par.getlist('interfaceid')[0])
+                    models.test_case.objects.filter(interface=interface).update(isdefault=0)
+                models.test_case.objects.filter(id=id[0]).update(**data)
                 return JsonResponse(ResultSet(1).todict())
 
             if act[0] == 'delete':

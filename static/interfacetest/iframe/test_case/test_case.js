@@ -174,21 +174,38 @@ $(document).ready(function() {
         }
     })
     $("#modal_a input[value='确定']").on('click', function (){
+        if($('#a_body_type').val()=='application/x-www-form-urlencoded'){
+            var bodydata=JSON.stringify(getdata('body'));
+        }
+        else{
+            var bodydata=$('#a_body').val();
+        }
+        var body={
+            type:$('#a_body_type').val(),
+            data:bodydata
+        }
         var data = {
-            type:"ifmanage",
+            type:"testcase",
             act:"alter",
-            ifname:$("#a_ifname").val(),
-            sysid:$("#a_sysid").val(),
-            url:$("#a_url").val(),
-            remark:$("#a_remark").val(),
-            id:$("#modal_a").attr('trid')
+            id:$("#modal_a").attr("trid"),
+            interfaceid:$("table.table tbody tr[selected='selected']").attr("trid"),
+            method:$("#a_method").val(),
+            param:JSON.stringify(getdata('params')),
+            header:JSON.stringify(getdata('header')),
+            body:JSON.stringify(body),
+            cookie:$('#a_cookie').val(),
+            expect:JSON.stringify(getdata('expect')),
+            isdefault:$("#a_isdefault").val(),
+            isactive:$("#a_isactive").val(),
+            remark:$('#a_remark').val()
         };
         $.post(
             '../api/postdata',
             data,
             function(respon){
                 if (respon.issuccess == 1){
-                    window.location.reload();
+                     $("#modal_a").trigger("reveal:close");
+                    recase();
                 }
                 else{
                     alert(respon.errormsg);
