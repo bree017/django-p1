@@ -17,7 +17,7 @@
         <!--侧边栏-->
         <div class="mbutton" id="mbtn1" iframe="settings" >设置</div>
         <div class="mbutton" id="mbtn2" selected="selected" iframe="ifmanage">接口管理</div>
-{#        <div class="mbutton" id="mbtn3" active=false>测试用例</div>#}
+        <div class="mbutton" id="mbtn3" active=false iframe="testcase">测试用例</div>
         <!--<div class="mbutton">自动化测试</div>-->
         <!--<div class="mbutton">性能测试</div>-->
     </div>
@@ -26,6 +26,9 @@
     </div>
     <div class="frame" iframe="ifmanage">
         <iframe src="{% url 'ifmanage' %}" frameborder="0"></iframe>
+    </div>
+        <div class="frame" iframe="testcase">
+        <iframe src="{% url 'testcase' %}" frameborder="0"></iframe>
     </div>
     <script>
         $('.left-menu > div').on({
