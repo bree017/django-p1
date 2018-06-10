@@ -30,4 +30,5 @@ urlpatterns = [
     url(r'^testcase/$',views.testcase,name="testcase"),
     url(r'^api/getdata$',views.getdata),
     url(r'^api/postdata$',views.postdata),
+    url(r'^api/runcase$',views.runcase),
 ]

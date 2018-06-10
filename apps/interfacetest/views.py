@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login as ulogin
 from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
+from apps.interfacetest.apitest import sender
 
 import json
 import datetime
@@ -322,7 +323,6 @@ def postdata(request):
                     models.test_case.objects.filter(interface=interface).update(isdefault=0)
                 models.test_case.objects.filter(id=id[0]).update(**data)
                 return JsonResponse(ResultSet(1).todict())
-
             if act[0] == 'delete':
                 if not id: return JsonResponse(ResultSet(0, '删除数据id参数必填').todict())
                 if id[0] == '': return JsonResponse(ResultSet(0, 'id参数不能为空字符串').todict())
@@ -334,4 +334,25 @@ def postdata(request):
     except Exception as e:
         return JsonResponse(ResultSet(0, str(e)).todict())
 
-
+def runcase(request):
+    try:
+        if request.method != 'POST': return JsonResponse(ResultSet(0, '请求方式应该为POST').todict())
+        par = request.POST
+        type = par.getlist('type')
+        id = par.getlist('id')
+        if not type or type[0] == '': return JsonResponse(ResultSet(0, 'type参数必填').todict())
+        ids = id[0].split(',') if not id or id[0] == '' else []
+        if type[0] == 'case':
+            objlist=models.test_case.objects.filter(isactive=1) if ids == [] else models.test_case.objects.filter(id__in=ids)
+            tclist = []
+            for obj in objlist:
+                testcase=model_to_dict(obj)
+                testcase.update({"url":obj.interface.url})
+                tclist.append(testcase)
+            sender.sendrequest(tclist)
+            for tc in tclist:
+                tc.pop('url')
+                models.test_case.objects.filter(id=tc['id']).update(**tc)
+            return JsonResponse(ResultSet(1).todict())
+    except Exception as e:
+        return JsonResponse(ResultSet(0, str(e)).todict())
