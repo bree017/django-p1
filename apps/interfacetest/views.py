@@ -341,7 +341,7 @@ def runcase(request):
         type = par.getlist('type')
         id = par.getlist('id')
         if not type or type[0] == '': return JsonResponse(ResultSet(0, 'type参数必填').todict())
-        ids = id[0].split(',') if not id or id[0] == '' else []
+        ids = id[0].split(',') if id and id[0] != '' else []
         if type[0] == 'case':
             objlist=models.test_case.objects.filter(isactive=1) if ids == [] else models.test_case.objects.filter(id__in=ids)
             tclist = []
@@ -354,5 +354,7 @@ def runcase(request):
                 tc.pop('url')
                 models.test_case.objects.filter(id=tc['id']).update(**tc)
             return JsonResponse(ResultSet(1).todict())
+        else:
+            return JsonResponse(ResultSet(0,'type不正确').todict())
     except Exception as e:
         return JsonResponse(ResultSet(0, str(e)).todict())
