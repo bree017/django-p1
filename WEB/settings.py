@@ -113,7 +113,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
 
 LANGUAGE_CODE = 'zh-hans'
-
+DEFAULT_CHARSET = 'utf-8'
 TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
@@ -132,3 +132,5 @@ STATICFILES_DIRS = (
     )
 TEMPLATE_DIRS = (os.path.join(BASE_DIR,  'templates'),)
 #注：STATIC_URL和后面的STATICFILES_DIRS都是全局的变量，模板里可以直接用,so is STATICFILES_DIRS,BASE_DIR
+
+

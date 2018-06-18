@@ -16,5 +16,5 @@ class ResultSet():
         return {
             'issuccess':self.issuccess,
             'errormsg':self.errormsg,
-            'data':self.data
+            'data':self.data,
         }

@@ -1,3 +1,4 @@
+import sys,time,requests
 from django.shortcuts import render
 from apps.interfacetest import models
 from django.http import JsonResponse
@@ -10,7 +11,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login as ulogin
 from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
-from apps.interfacetest.apitest import sender
+from apps.interfacetest.apitest import httphelper
+from django.template import Context, loader
 
 import json
 import datetime
@@ -151,10 +153,10 @@ def testcase(request):
 
 def getdata(request):
     try:
-        if request.method != 'GET':return JsonResponse(ResultSet(0, '请求方式应该为GET').todict())
+        if request.method != 'GET':return JsonResponse(data=ResultSet(0, '请求方式应该为GET').todict(),charset='utf-8')
         par = request.GET
         type = par.getlist('type')
-        if not type or type[0] =='':return JsonResponse(ResultSet(0, 'type参数必填').todict())
+        if not type or type[0] =='':return JsonResponse(ResultSet(0, 'type参数必填').todict(),content_type='application/json;charset=utf-8')
         if type[0] == 'testcase':       #只获取第一个作为type参数
             ids=par.getlist('ids')[0].split(',')
             data =[]
@@ -171,7 +173,7 @@ def getdata(request):
         else :
             return JsonResponse(ResultSet(0, 'type参数有误').todict())
     except Exception as e:
-        return JsonResponse(ResultSet(0, str(e)).todict())
+        return JsonResponse(ResultSet(0, str(e)).todict(),encoder='utf-8')
 
 # @login_required
 def postdata(request):
@@ -347,12 +349,14 @@ def runcase(request):
             tclist = []
             for obj in objlist:
                 testcase=model_to_dict(obj)
-                testcase.update({"url":obj.interface.url})
+                testcase.update({"url":obj.interface.sys.host + obj.interface.url})
                 tclist.append(testcase)
-            sender.sendrequest(tclist)
+                httphelper.sendrequest(tclist)
             for tc in tclist:
                 tc.pop('url')
                 models.test_case.objects.filter(id=tc['id']).update(**tc)
+            #testplan构造需要想想
+            # httphelper.createreport(testplan)
             return JsonResponse(ResultSet(1).todict())
         else:
             return JsonResponse(ResultSet(0,'type不正确').todict())

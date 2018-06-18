@@ -6,10 +6,9 @@
 # @File    : sender.py
 # @Software: PyCharm
 import requests
-import datetime
-import json
+import datetime,sys,json,re
 from apps.interfacetest.apitest.jsoncheck import JsonCheck
-import re
+from django.template import Context, loader
 
 
 def sendrequest(caselist):
@@ -36,7 +35,10 @@ def sendrequest(caselist):
                 testcase["issuccess"] = 0
                 return
             testcase["end_time"] = datetime.datetime.now()
-            testcase["response"]= rsp.text
+            try:        #优先json（text有编码问题）
+                testcase["response"]= rsp.json()
+            except Exception as e:
+                testcase["response"] = rsp.text()
             if rsp.status_code != 200:
                 testcase["issuccess"] = 0
             else:
@@ -69,6 +71,14 @@ def is_json(myjson):
     except Exception as e:
         return False
     return True
+
+def createreport(testplan):
+    sys.setdefaultencoding('utf-8')
+    t = loader.get_template('interfacetest/testreport.html')
+    file = t.render(Context(testplan))
+    fh = open('testreport_%s.html' % (datetime.strftime("%d/%m/%Y-%H:%M:%S")), 'w')
+    fh.write(file)
+    fh.close()
 
 if __name__=='__main__':
 

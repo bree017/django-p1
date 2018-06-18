@@ -1,0 +1,119 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试报告</title>
+</head>
+<body>
+    <h1>测试报告</h1>
+    <div class="sum">
+        <table>
+            <thead>
+                <th>执行用例总数</th>
+                <th>成功用例数</th>
+                <th>失败用例数</th>
+                <th>通过率</th>
+                <th>开始时间</th>
+                <th>结束时间</th>
+                <th>耗时</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ sum.count }}</td>
+                    <td>{{ sum.passc }}</td>
+                    <td>{{ sum.failc }}</td>
+                    <td>{% widthratio sum.passc sum.count 100%}%</td>
+                    <td>{{ sum.starttime |date:"Y-m-d H:i:s" }}</td>
+                    <td>{{ sum.endtime |date:"Y-m-d H:i:s" }}</td>
+                    <td>{{ sum.costtime |date:"H:i:s"}}</td>
+                </tr>
+                {{ sum }}
+            </tbody>
+        </table>
+    </div>
+    <div class="fail">
+        <table>
+            <thead>
+                <th>用例集</th>
+                <th>接口名</th>
+                <th>用例ID</th>
+                <th>预期结果</th>
+                <th>实际结果</th>
+                <th>错误信息</th>
+            </thead>
+            <tbody>
+                {% for ts in testsuits%}
+                    {% for tc in ts.testcase %}
+                        {% if tc.issuccess == 0 %}
+                            <td>{{ ts.name }}</td>
+                            <td>{{ tc.interface.ifname }}</td>
+                            <td>{{ tc.id }}</td>
+                            <td>{{ tc.expect }}</td>
+                            <td>{{ tc.response }}</td>
+                            <td>{{ tc.result }}</td>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="pass">
+        <table>
+            <thead>
+                <th>用例集</th>
+                <th>用例名</th>
+                <th>用例ID</th>
+                <th>开始时间</th>
+                <th>结束时间</th>
+                <th>耗时</th>
+            </thead>
+            <tbody>
+                {% for ts in testsuits%}
+                    {% for tc in ts.testcase %}
+                        {% if tc.issuccess == 1 %}
+                            <td>{{ ts.name }}</td>
+                            <td>{{ tc.interface.ifname }}</td>
+                            <td>{{ tc.id }}</td>
+                            <td>{{ tc.start_time |date:"Y-m-d H:i:s"}}</td>
+                            <td>{{ tc.end_time |date:"Y-m-d H:i:s"}}</td>
+                            <td>{{ tc.costtime |date:"Y-m-d H:i:s"}}</td>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <style>
+        *{
+            color: #5f5f5f;
+        }
+        h1{
+            /*margin:auto;*/
+            text-align:center;
+        }
+        div{
+            margin: 10px;
+        }
+        table{
+            border-collapse: collapse;
+            margin: 0 auto;
+            text-align: center;
+            cellspacing:0px;
+            table-layout:fixed;
+            align:center;
+            border:1px solid;
+            overflow:auto;
+            width:100%;
+        }
+        th{
+            background-color: #dffff8;
+            border:1px solid;
+        }
+        td{
+            background-color: #ebebeb;
+            border:1px solid;
+        }
+    </style>
+</body>
+</html>

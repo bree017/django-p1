@@ -204,9 +204,10 @@ $(document).ready(function() {
                         var data=rsp[0].data;
                         if(data.length != 0)
                         {
+                            var method='post';
                             for (i in data){
                               if (data[i].isdefault == 1){
-                                    var method=data[i].method.toLowerCase();
+                                    method=data[i].method.toLowerCase();
                                     var param=$.parseJSON(data[i].param);
                                     var header=$.parseJSON(data[i].header);
                                     var body=$.parseJSON(data[i].body);
@@ -215,14 +216,17 @@ $(document).ready(function() {
                             $("#pm_metod").val(method);
                             update("params",param);
                             update("header",header);
-                            $("#req_body_type").val(body.type)
-                            $("#req_body_type").trigger("change");
-                            if (body.type == 'application/x-www-form-urlencoded'){
-                                update("body",$.parseJSON(body.data));
+                            if (body != undefined && body.type != undefined){
+                                $("#req_body_type").val(body.type)
+                                $("#req_body_type").trigger("change");
+                                if (body.type == 'application/x-www-form-urlencoded'){
+                                    update("body",$.parseJSON(body.data));
+                                }
+                                else {
+                                    $("#req_body").val(body.data);
+                                }
                             }
-                            else {
-                                $("#req_body").val(body.data);
-                            }
+
                         }
                         // else{                //想一下还是不要置空了
                         //     $("#pm_metod").val('post');
