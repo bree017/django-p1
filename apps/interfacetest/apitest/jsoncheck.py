@@ -61,6 +61,8 @@ class JsonCheck():
                         if isinstance(valuereg,(float,int,bool)) or valuereg == None:          #匹配value是布尔、数字、None(null)
                             if valuereg==dic_json[key]: return 1,{key:dic_json[key]}
                         elif re.fullmatch(valuereg, str(dic_json[key])): return 1,{key:dic_json[key]}
+                        elif valuereg in ['0','1']:                 #1，0与true，false的比较
+                            if int(valuereg) == dic_json[key]: return 1,{key:dic_json[key]}
                         # return -1,'%s:%s的value不匹配%s:%s'%(keyreg,valuereg,key,dic_json[key])                                       #不注释则只返回第一次key匹配成功的value匹配结果
                     elif isinstance(dic_json[key],dict):                  #如果dic_json[key]依旧是字典类型,递归
                         mrs,msg=self.json_regmatch(keyreg, valuereg, dic_json[key])

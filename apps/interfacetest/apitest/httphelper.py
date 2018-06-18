@@ -47,13 +47,21 @@ def sendrequest(caselist):
                 jsoncheck = JsonCheck()
                 for i in expect:
                     try:
-                        if i=='*':      #如果key是*就是表示从结果中搜索字符串（正则方式）
+                        if i=='*':      #如果key是*就是表示从结果中搜索字符串（正则方式）--目前无法传多个，需要改成list
                             testcase["issuccess"] = 1 if re.search(expect[i], rsp.text) else 0
                             if testcase["issuccess"] != 1:
                                 testcase["result"] = '%s:%s--没有匹配的数据' % (i, expect[i])
                                 break
                         else:
-                            testcase["issuccess"],testcase["result"] = jsoncheck.json_reg(i,expect[i],json.loads(rsp.text))
+                            #转换特殊类型
+                            if expect[i].lower() in ['none']:
+                                exp = None
+                            elif expect[i].lower() in ['true']:
+                                exp = True
+                            elif expect[i].lower() in ['false']:
+                                exp = False
+                            else:exp = expect[i]
+                            testcase["issuccess"],testcase["result"] = jsoncheck.json_reg(i,exp,json.loads(rsp.text))
                             if testcase["issuccess"] != 1:
                                 break
                     except Exception as e:
