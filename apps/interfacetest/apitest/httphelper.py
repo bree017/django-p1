@@ -41,6 +41,7 @@ def sendrequest(caselist):
                 testcase["response"] = rsp.text()
             if rsp.status_code != 200:
                 testcase["issuccess"] = 0
+                testcase["result"]='接口返回状态码：%s'%(rsp.status_code)
             else:
                 testcase["issuccess"] = 1
                 expect=testcase["expect"] != '' and json.loads(testcase["expect"]) or ''
@@ -48,22 +49,22 @@ def sendrequest(caselist):
                 for i in expect:
                     try:
                         if i=='*':      #如果key是*就是表示从结果中搜索字符串（正则方式）--目前无法传多个，需要改成list
-                            testcase["issuccess"] = 1 if re.search(expect[i], rsp.text) else 0
+                            testcase["issuccess"] = 1 if re.search(expect[i], str(testcase["response"])) else 0
                             if testcase["issuccess"] != 1:
                                 testcase["result"] = '%s:%s--没有匹配的数据' % (i, expect[i])
                                 break
                         else:
                             #转换特殊类型
-                            if expect[i].lower() in ['none']:
+                            if expect[i].lower() in ['none','null']:
                                 exp = None
                             elif expect[i].lower() in ['true']:
                                 exp = True
                             elif expect[i].lower() in ['false']:
                                 exp = False
                             else:exp = expect[i]
-                            testcase["issuccess"],testcase["result"] = jsoncheck.json_reg(i,exp,json.loads(rsp.text))
-                            if testcase["issuccess"] != 1:
-                                break
+                            testcase["issuccess"],testcase["result"] = jsoncheck.json_reg(i,exp,testcase["response"])
+                            if testcase["issuccess"]==2: testcase["issuccess"], testcase["result"]=0,'响应数据不是JSON格式'
+                            if testcase["issuccess"] != 1: break
                     except Exception as e:
                         testcase["issuccess"] = 0
                         testcase["result"] = '%s:%s匹配异常--%s' % (i, expect[i],e)

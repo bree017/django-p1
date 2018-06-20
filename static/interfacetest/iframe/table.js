@@ -40,11 +40,13 @@ function update(table,dit){     //更新table数据
     var id=1;
     for (i in dit){
         content ="<tr trid="+id+">" +
-            "<td><input type=\"text\" class='key' tclass='"+table+ "' trid="+id+" value='"+i+"'></td>" +
-            "<td><input type=\"text\" class='value' tclass='"+table+ "' trid="+id+" value='"+dit[i]+"'></td>" +
+            "<td><input type=\"text\" class='key' tclass='"+table+ "' trid="+id+"></td>" +
+            "<td><input type=\"text\" class='value' tclass='"+table+ "' trid="+id+"></td>" +
             "<td><input type=\"button\" value=\"X\" class='delbtn' tclass='"+table+ "' trid="+id+"></td>" +
             "</tr>"
         $("table." + table + " tbody").append(content);
+        $("table." + table + " tbody tr[trid='" + id + "'] td input.key").val(i);
+        $("table." + table + " tbody tr[trid='" + id + "'] td input.value").val(dit[i]);
         id++
     }
     content ="<tr trid="+id+">" +

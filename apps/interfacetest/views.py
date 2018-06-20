@@ -354,6 +354,7 @@ def runcase(request):
                 httphelper.sendrequest(tclist)
             for tc in tclist:
                 tc.pop('url')
+                if not isinstance(tc["response"],(dict,list)):tc["response"]=tc["response"][:10000]   #防止超长
                 models.test_case.objects.filter(id=tc['id']).update(**tc)
             #testplan构造需要想想
             # httphelper.createreport(testplan)

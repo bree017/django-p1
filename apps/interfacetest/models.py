@@ -41,7 +41,7 @@ class test_case(models.Model):
     body =models.CharField(max_length=1000,default='')
     cookie =models.CharField(max_length=1000,default='')
     expect =models.CharField(max_length=1000,default='')
-    response = models.CharField(max_length=5000,default='')
+    response = models.CharField(max_length=10000,default='')
     result = models.CharField(max_length=5000,default='')
     issuccess = models.BooleanField(default=0)
     isdefault = models.BooleanField(default=0)
