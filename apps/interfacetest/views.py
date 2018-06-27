@@ -43,7 +43,7 @@ def index(request):
 # @login_required
 def settings(request):
     page = request.GET.get('page')
-    contact_list = models.sysconfig.objects.all()  # 获取所有contacts,假设在models.py中已定义了Contacts模型
+    contact_list = models.sysconfig.objects.all().order_by('-id')  # 获取所有contacts,假设在models.py中已定义了Contacts模型
     paginator = Paginator(contact_list, 20) # 每页20条
     user=request.user
     userhost=models.user_host.objects.filter(user=user.id)
@@ -66,7 +66,7 @@ def ifmanage(request):
         sysid = request.GET.get('sysid')
         remark = request.GET.get('remark')
 
-        contact_list = models.ifmanage.objects.all()
+        contact_list = models.ifmanage.objects.all().order_by('-id')
         if ifname == None or ifname == '':
             ifname = ''
         else:
@@ -113,7 +113,7 @@ def testcase(request):
         sysid = request.GET.get('sysid')
         remark = request.GET.get('remark')
 
-        contact_list = models.ifmanage.objects.all()
+        contact_list = models.ifmanage.objects.all().order_by('-id')
         if ifname == None or ifname == '':
             ifname = ''
         else:
@@ -163,7 +163,7 @@ def getdata(request):
             for id in ids:
                 try:
                     objlist=[]
-                    for obj in models.test_case.objects.filter(interface_id=id):
+                    for obj in models.test_case.objects.filter(interface_id=id).order_by('-id') :
                         objlist.append(model_to_dict(obj))
                     result=ResultSet(1,'',objlist).todict()
                 except Exception as e:

@@ -70,7 +70,7 @@ div.postman table input{
 }
 div.postman textarea{
     width:100%;
-    resize:none;
+    /*resize:none;*/
 }
 div.postman div.request div.label,div.postman div.responses div.label{
     display: inline-block;
