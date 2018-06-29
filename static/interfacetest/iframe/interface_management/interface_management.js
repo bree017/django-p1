@@ -315,14 +315,22 @@ $(document).ready(function() {
 
     function rsp_update(data, xhr) {
         if (xhr.status != 0 && xhr.status!=404){
-            if (xhr.getResponseHeader('content-type').indexOf('application/json')>=0){  //判断是否json格式
+            // if (xhr.getResponseHeader('content-type').indexOf('application/json')>=0){  //判断是否json格式
+            try{
                 var options = {
                   collapsed: false,
                   withQuotes: false
                 };
-                $('#rsp_rsp').jsonViewer(data, options);
+                if(typeof(data) == "object"){
+                    $('#rsp_rsp').jsonViewer(data, options);
+                }
+                else{
+                    $('#rsp_rsp').jsonViewer( JSON.parse(data), options);
+                }
+
             }
-            else {
+            // else {
+            catch (err){
                 $('#rsp_rsp').text(data.toString());
             }
             var pmheader="<pre>"+xhr.getAllResponseHeaders()+"</pre>";
