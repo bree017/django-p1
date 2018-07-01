@@ -41,6 +41,9 @@ $(document).ready(function() {
                             }
                         })
                     }
+                    else{
+                        $("#tcdata").html("");
+                    }
                 }
                 else {
                     alert(rsp.errormsg);

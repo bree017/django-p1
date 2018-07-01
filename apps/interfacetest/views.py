@@ -3,7 +3,7 @@ from django.shortcuts import render
 from apps.interfacetest import models
 from django.http import JsonResponse
 from django.http import HttpResponse
-from apps.interfacetest.datastruct import ResultSet
+from apps.interfacetest.datastruct import ResultSet,TestPlane
 from django.core import serializers
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from itertools import chain
@@ -43,7 +43,7 @@ def index(request):
 # @login_required
 def settings(request):
     page = request.GET.get('page')
-    contact_list = models.sysconfig.objects.all().order_by('-id')  # 获取所有contacts,假设在models.py中已定义了Contacts模型
+    contact_list = models.sysconfig.objects.all().order_by('-id')
     paginator = Paginator(contact_list, 20) # 每页20条
     user=request.user
     userhost=models.user_host.objects.filter(user=user.id)
@@ -345,6 +345,7 @@ def runcase(request):
         if not type or type[0] == '': return JsonResponse(ResultSet(0, 'type参数必填').todict())
         ids = id[0].split(',') if id and id[0] != '' else []
         if type[0] == 'case':
+            testplan = TestPlane()
             objlist=models.test_case.objects.filter(isactive=1) if ids == [] else models.test_case.objects.filter(id__in=ids)
             tclist = []
             for obj in objlist:
@@ -356,8 +357,9 @@ def runcase(request):
                 tc.pop('url')
                 if not isinstance(tc["response"],(dict,list)):tc["response"]=tc["response"][:10000]   #防止超长
                 models.test_case.objects.filter(id=tc['id']).update(**tc)
-            #testplan构造需要想想
-            # httphelper.createreport(testplan)
+            
+            testplan.calc([{'name':'手动执行','testcase':tclist}])
+            httphelper.createreport(testplan)
             return JsonResponse(ResultSet(1).todict())
         else:
             return JsonResponse(ResultSet(0,'type不正确').todict())

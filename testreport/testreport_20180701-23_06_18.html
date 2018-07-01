@@ -1,4 +1,4 @@
-{% load staticfiles %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,13 +20,13 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>{{ testplan.count }}</td>
-                    <td>{{ testplan.passc }}</td>
-                    <td>{{ testplan.failc }}</td>
-                    <td>{% widthratio testplan.passc sum.count 100%}%</td>
-                    <td>{{ testplan.starttime |date:"Y-m-d H:i:s" }}</td>
-                    <td>{{ testplan.endtime |date:"Y-m-d H:i:s" }}</td>
-                    <td>{{ testplan.costtime |date:"H:i:s"}}</td>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>1</td>
+                    <td>%</td>
+                    <td>2018-07-01 23:06:16</td>
+                    <td>2018-07-01 23:06:17</td>
+                    <td></td>
                 </tr>
             </tbody>
         </table>
@@ -43,19 +43,19 @@
                 <th>错误信息</th>
             </thead>
             <tbody>
-                {% for ts in testplan.testsuits%}
-                    {% for tc in ts.testcase %}
-                        {% if tc.issuccess == 0 %}
-                            <td>{{ ts.name }}</td>
-                            <td>{{ tc.interface.sys.sysname }}</td>
-                            <td>{{ tc.interface.ifname }}</td>
-                            <td>{{ tc.id }}</td>
-                            <td>{{ tc.expect }}</td>
-                            <td>{{ tc.response }}</td>
-                            <td>{{ tc.result }}</td>
-                        {% endif %}
-                    {% endfor %}
-                {% endfor %}
+                
+                    
+                        
+                            <td>手动执行</td>
+                            <td></td>
+                            <td></td>
+                            <td>43</td>
+                            <td>{&quot;issuccess&quot;:&quot;0&quot;,&quot;Message&quot;:&quot;.*未传送用户验证.*&quot;,&quot;*&quot;:&quot;息&#39;。\&quot;, \&quot;C&#39;o&#39;d&quot;}</td>
+                            <td>{&#39;IsSuccess&#39;: False, &#39;Data&#39;: None, &#39;ResponseError&#39;: {&#39;Code&#39;: 7, &#39;Message&#39;: &#39;权限验证失败, 未传送用户验证信息。&#39;, &#39;Code2&#39;: 0, &#39;BizType&#39;: 0}, &#39;CheckedKey&#39;: None, &#39;Message&#39;: None}</td>
+                            <td>*:息&#39;。&quot;, &quot;C&#39;o&#39;d--没有匹配的数据</td>
+                        
+                    
+                
             </tbody>
         </table>
     </div>
@@ -71,19 +71,11 @@
                 <th>耗时</th>
             </thead>
             <tbody>
-                {% for ts in testplan.testsuits%}
-                    {% for tc in ts.testcase %}
-                        {% if tc.issuccess == 1 %}
-                            <td>{{ ts.name }}</td>
-                            <td>{{ tc.interface.sys.sysname }}</td>
-                            <td>{{ tc.interface.ifname }}</td>
-                            <td>{{ tc.id }}</td>
-                            <td>{{ tc.start_time |date:"Y-m-d H:i:s"}}</td>
-                            <td>{{ tc.end_time |date:"Y-m-d H:i:s"}}</td>
-                            <td>{{ tc.costtime |date:"Y-m-d H:i:s"}}</td>
-                        {% endif %}
-                    {% endfor %}
-                {% endfor %}
+                
+                    
+                        
+                    
+                
             </tbody>
         </table>
     </div>

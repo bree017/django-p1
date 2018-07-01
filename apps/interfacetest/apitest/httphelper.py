@@ -6,10 +6,11 @@
 # @File    : sender.py
 # @Software: PyCharm
 import requests
-import datetime,sys,json,re
+import datetime,sys,json,re,os
 from apps.interfacetest.apitest.jsoncheck import JsonCheck
 from django.template import Context, loader
-
+from django.conf import settings
+import codecs
 
 def sendrequest(caselist):
     s = requests.Session()
@@ -82,26 +83,27 @@ def is_json(myjson):
     return True
 
 def createreport(testplan):
-    sys.setdefaultencoding('utf-8')
+    # sys.setdefaultencoding('utf-8')
     t = loader.get_template('interfacetest/testreport.html')
-    file = t.render(Context(testplan))
-    fh = open('testreport_%s.html' % (datetime.strftime("%d/%m/%Y-%H:%M:%S")), 'w')
+    file = t.render({"testplan":testplan})
+    fh = codecs.open( settings.BASE_DIR+'/testreport/testreport_%s.html' % (datetime.datetime.now().strftime("%Y%m%d-%H_%M_%S")), 'w','utf-8')
     fh.write(file)
     fh.close()
 
 if __name__=='__main__':
 
-    tc={
-        'method':'post',
-        'param':'{"type":"testcase","ids":"29"}',
-        'header':'{"test":"123"}',
-        'body':'{"type":"application/json","data":"123"}',
-        'cookie':'{"123":"234"}',
-        'expect':'{"*":"登录1"}',
-        'url':'http://gz.ews.sellercube.com'
-    }
-    testcaselist=[tc]
-    www=json.loads(tc.body)
-    sendrequest(testcaselist)
-    print(testcaselist[0])
-
+    # tc={
+    #     'method':'post',
+    #     'param':'{"type":"testcase","ids":"29"}',
+    #     'header':'{"test":"123"}',
+    #     'body':'{"type":"application/json","data":"123"}',
+    #     'cookie':'{"123":"234"}',
+    #     'expect':'{"*":"登录1"}',
+    #     'url':'http://gz.ews.sellercube.com'
+    # }
+    # testcaselist=[tc]
+    # www=json.loads(tc.body)
+    # sendrequest(testcaselist)
+    # print(testcaselist[0])
+    testplan=''
+    createreport(testplan)
